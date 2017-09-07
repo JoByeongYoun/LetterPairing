@@ -1,0 +1,42 @@
+<glyph format="1" name="giyeok_iii">
+  <advance width="973" />
+  <unicode hex="ACE0" />
+  <outline>
+    <contour>
+      <point innerType="fill" name="z1l" type="line" x="673" y="247" />
+      <point type="offcurve" x="685" y="296" />
+      <point type="offcurve" x="704" y="413" />
+      <point name="z2l" type="qcurve" x="711" y="472" />
+      <point type="offcurve" x="719" y="531" />
+      <point type="offcurve" x="728" y="641" />
+      <point dependY="y4l" name="z3l" type="qcurve" x="730" y="683" />
+      <point type="offcurve" x="692" y="683" />
+      <point type="offcurve" x="590" y="680" />
+      <point name="z4l" type="qcurve" x="538" y="678" />
+      <point type="offcurve" x="486" y="677" />
+      <point type="offcurve" x="392" y="673" />
+      <point name="z5r" smooth="yes" type="qcurve" x="361" y="672" />
+      <point type="offcurve" x="346" y="671" />
+      <point type="offcurve" x="212" y="661" />
+      <point name="z6r" type="qcurve" x="194" y="657" />
+      <point name="z6l" type="line" x="159" y="722" />
+      <point type="offcurve" x="199" y="717" />
+      <point type="offcurve" x="279" y="711" />
+      <point name="z5l" smooth="yes" type="qcurve" x="311" y="711" />
+      <point type="offcurve" x="366" y="711" />
+      <point type="offcurve" x="499" y="713" />
+      <point name="z4r" type="qcurve" x="566" y="716" />
+      <point type="offcurve" x="633" y="719" />
+      <point type="offcurve" x="758" y="728" />
+      <point name="z7l" type="qcurve" x="804" y="735" />
+      <point name="z7r" type="line" x="822" y="718" />
+      <point dependY="y4l" name="z3r" type="line" x="817" y="683" />
+      <point type="offcurve" x="813" y="659" />
+      <point type="offcurve" x="790" y="529" />
+      <point name="z2r" type="qcurve" x="776" y="466" />
+      <point type="offcurve" x="763" y="404" />
+      <point type="offcurve" x="732" y="290" />
+      <point name="z1r" type="qcurve" x="715" y="247" />
+    </contour>
+  </outline>
+</glyph>
