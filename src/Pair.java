@@ -3,19 +3,19 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
-public class Pair { // ÇÑ½ÖÀÇ CoordinateÀ» °¡Áö´Â °´Ã¼
+public class Pair { // í•œìŒì˜ Coordinateì„ ê°€ì§€ëŠ” ê°ì²´
 	private Coordinate left;
 	private Coordinate right;
-	// pair°¡ ¼º°øÇÑ ±ÛÀÚ¿Í ¾ÈµÈ ±ÛÀÚ¸¦ ±¸ºĞÇÏ±âÀ§ÇØ¼­ ¾î¶»°Ô ±¸Á¶¸¦ ¼öÁ¤
+	// pairê°€ ì„±ê³µí•œ ê¸€ìì™€ ì•ˆëœ ê¸€ìë¥¼ êµ¬ë¶„í•˜ê¸°ìœ„í•´ì„œ ì–´ë–»ê²Œ êµ¬ì¡°ë¥¼ ìˆ˜ì •
 	private int pairNum;
 
-	private int leftIdx; // polyCoordiList¿¡¼­ÀÇ idx
+	private int leftIdx; // polyCoordiListì—ì„œì˜ idx
 	private int rightIdx;
 
 	private JLabel leftLabel;
 	private JLabel rightLabel;
 
-	public Pair(int lIdx, int rIdx, ArrayList<Coordinate> coordiList) { 
+	public Pair(int lIdx, int rIdx, ArrayList<Coordinate> coordiList) {
 		leftIdx = lIdx;
 		rightIdx = rIdx;
 		left = coordiList.get(leftIdx);
@@ -26,29 +26,29 @@ public class Pair { // ÇÑ½ÖÀÇ CoordinateÀ» °¡Áö´Â °´Ã¼
 		left = l;
 		right = r;
 	}
-	 
+
 	public void switchLR(){
 		Coordinate tmp; //coordinate switch
 		tmp = left;
 		left = right;
 		right = tmp;
-		
-		//È­¸é»ó¿¡ Ãâ·ÂµÇ´Â label switch
-		
+
+		//í™”ë©´ìƒì— ì¶œë ¥ë˜ëŠ” label switch
+
 		setLabel();
-		
+
 	}
 	public void setLabel() {
 		leftLabel = new JLabel("z" + pairNum + "l");
 		rightLabel = new JLabel("z" + pairNum + "r");
-		
+
 		leftLabel.setLocation(left.getX(), left.getY());
 		rightLabel.setLocation(right.getX(), right.getY());
 
 		leftLabel.setSize(100, 20);
 		rightLabel.setSize(100, 20);
 	}
-	
+
 	public JLabel getLeftLabel(){
 		return leftLabel;
 	}

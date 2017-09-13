@@ -6,8 +6,8 @@ public class PairingKeyAdapter extends KeyAdapter {
 
 	ArrayList<LetterPairing> lpList;
 	LetterPairing lp;
-	
-	public PairingKeyAdapter(){// lpList¸¦ ¹Ş¾Æ¿Í¼­ 
+
+	public PairingKeyAdapter(){// lpListë¥¼ ë°›ì•„ì™€ì„œ
 		lpList = new ArrayList<LetterPairing>();
 	}
 	public void addLp(LetterPairing lp){
@@ -16,39 +16,39 @@ public class PairingKeyAdapter extends KeyAdapter {
 	public void clear(){
 		lpList.clear();
 	}
-		
+
 	public void keyPressed(KeyEvent e){
 		System.out.println(e.getKeyText(e.getKeyCode()));
 		if(lpList == null)
 			return;
-		
-		//change ¸ğµå¿¡ µ¹ÀÔÇÑ lp°¡ ÀÖ³ª °Ë»çÇÑ´Ù.
+
+		//change ëª¨ë“œì— ëŒì…í•œ lpê°€ ìˆë‚˜ ê²€ì‚¬í•œë‹¤.
 		for(int i=0; i< lpList.size(); i++){
 			lp = lpList.get(i);
 			if(lp.isPairChangeMode())
 				break;
-			//³¡±îÁö °¬´Âµ¥µµ change¸ğµåÀÎ lp°¡ ¾ø´Ù¸é 
+			//ëê¹Œì§€ ê°”ëŠ”ë°ë„ changeëª¨ë“œì¸ lpê°€ ì—†ë‹¤ë©´
 			if(i == lpList.size() - 1)
 				return ;
 		}
-		
-		//change ¸ğµåÀÎ lp°¡ ÀÌ °´Ã¼ÀÇ lpº¯¼ö·Î ÀúÀåµÊ
-		
+
+		//change ëª¨ë“œì¸ lpê°€ ì´ ê°ì²´ì˜ lpë³€ìˆ˜ë¡œ ì €ì¥ë¨
+
 		String s = e.getKeyText(e.getKeyCode());
 		System.out.print(s);
-		
+
 		if(s.equals("g") || s.equals("G")){
 			System.out.println("genpair");
 			//lp.setPairMode(GENPAIR);
 			lp.genPair();
 		}
-		
+
 		else if(s.equals("s") || s.equals("S")){
 			lp.switchLR();
 		}
 		else if(s.equals("R")){
 			lp.removePair();
-			
+
 		}
 	}
 }

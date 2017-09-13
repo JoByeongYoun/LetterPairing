@@ -2,7 +2,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class PairingMouseAdapter extends MouseAdapter{
-	
+
 	private LetterPairing lp;
 	public PairingMouseAdapter(LetterPairing lp){
 		this.lp = lp;
@@ -10,20 +10,20 @@ public class PairingMouseAdapter extends MouseAdapter{
 	public void mouseEntered(MouseEvent e){
 		System.out.println("entered");
 	}
-	
+
 	public void mousePressed(MouseEvent e){
 		System.out.println("pressed");
 		//lp.genPair(e.getComponent());
 	}
-	
+
 	public void mouseReleased(MouseEvent e){
-		System.out.println("¹ßµ¿");
-		if(! lp.isPairChangeMode()){ //change¸ğµå°¡ ¾Æ´Ï¸é
+		System.out.println("ë°œë™");
+		if(! lp.isPairChangeMode()){ //changeëª¨ë“œê°€ ì•„ë‹ˆë©´
 			lp.startChangePairMode(e.getComponent());
 			lp.cLp = lp;
 		}
-		else{// ¸ÂÀ¸¸é genpair 
-			//Àü¿¡ ¼±ÅÃÇÑ ¹öÆ°ÀÌ ÀÖ´ÂÁö È®ÀÎÇÏ°í genpair
+		else{// ë§ìœ¼ë©´ genpair
+			//ì „ì— ì„ íƒí•œ ë²„íŠ¼ì´ ìˆëŠ”ì§€ í™•ì¸í•˜ê³  genpair
 			if(lp.getGenPairFlag())
 			{
 				lp.genPair(e.getComponent());
@@ -31,7 +31,7 @@ public class PairingMouseAdapter extends MouseAdapter{
 			}
 		}
 	}
-	
+
 	public void mouseExited(MouseEvent e){
 		System.out.println("exited");
 	}

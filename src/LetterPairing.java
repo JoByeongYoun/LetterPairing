@@ -10,27 +10,27 @@ import java.util.Iterator;
 public class LetterPairing {
 	static int pairCount = 0;
 	static LetterPairing cLp;
-	public JFrame frame ; // Ã¢
+	public JFrame frame ; // ì°½
 	public JPanel p ;
 	public Polygon poly; //
-	private int matrix[][]; // »À´ë¸¦ µû±â À§ÇØ ¿Ü°¢¼±À¸·ÎºÎÅÍ °Å¸®¸¦ °è»ê
-	private ArrayList<Coordinate> skeleton; // »À´ë ÁÂÇ¥ list
-	private ArrayList<Coordinate> polyCoordiList; // ¿Ü°¢¼± ÁÂÇ¥ list
+	private int matrix[][]; // ë¼ˆëŒ€ë¥¼ ë”°ê¸° ìœ„í•´ ì™¸ê°ì„ ìœ¼ë¡œë¶€í„° ê±°ë¦¬ë¥¼ ê³„ì‚°
+	private ArrayList<Coordinate> skeleton; // ë¼ˆëŒ€ ì¢Œí‘œ list
+	private ArrayList<Coordinate> polyCoordiList; // ì™¸ê°ì„  ì¢Œí‘œ list
 	ArrayList<Integer> garbageCoordiList;
 	private ArrayList<Pair> pairList;
 	private ArrayList<Coordinate> notPairList;
 	private ArrayList<JLabel> polyButtonList;
-	
+
 	private boolean changePairFlag;
-	private boolean genPairFlag; // ¼öµ¿À¸·Î Æä¾î¸¦ »ı¼ºÇÏ´Â °úÁ¤ÀÏ¶§ true
+	private boolean genPairFlag; // ìˆ˜ë™ìœ¼ë¡œ í˜ì–´ë¥¼ ìƒì„±í•˜ëŠ” ê³¼ì •ì¼ë•Œ true
 	private Component[] genPairArr;
 	private Component changePairButton;
 
 	private int si;
 
-	LetterPairing(Letter letter, JFrame frame, JPanel p) { // ÀÔÃâ·ÂÀ¸·Î ¾òÀº letter¸¦ °¡Á®¿Â´Ù.
+	LetterPairing(Letter letter, JFrame frame, JPanel p) { // ì…ì¶œë ¥ìœ¼ë¡œ ì–»ì€ letterë¥¼ ê°€ì ¸ì˜¨ë‹¤.
 
-		// º¯¼öµé ÃÊ±âÈ­
+		// ë³€ìˆ˜ë“¤ ì´ˆê¸°í™”
 		skeleton = new ArrayList<Coordinate>();
 		polyCoordiList = new ArrayList<Coordinate>();
 		pairList = new ArrayList<Pair>();
@@ -38,13 +38,13 @@ public class LetterPairing {
 		changePairFlag = false;
 		genPairFlag = false;
 		genPairArr = new JLabel[2];
-		
+
 		this.frame = frame;
 		this.p = p;
 		//
-		
 
-		for (int i = 0; i < letter.size(); i++) { // ¿Ü°¢¼± ÁÂÇ¥ ÃÊ±âÈ­
+
+		for (int i = 0; i < letter.size(); i++) { // ì™¸ê°ì„  ì¢Œí‘œ ì´ˆê¸°í™”
 			polyCoordiList.add(new Coordinate(letter.xArray[i], letter.yArray[i]));
 		}
 
@@ -59,51 +59,51 @@ public class LetterPairing {
 					matrix[i][j] = 0;
 			}
 		}
-		
-		
-		skeletonizing(matrix); // °Å¸®°è»ê
+
+
+		skeletonizing(matrix); // ê±°ë¦¬ê³„ì‚°
 		setSkeleton();
-		
+
 		p.repaint();
 		pairing();
 		skeletonSort();
 
-		for (int i = 0; i < pairList.size(); i++) { // Æä¾î¸µµÈ ¹öÆ° ÀÌ¹ÌÁö¸¦ Ç¥½Ã
+		for (int i = 0; i < pairList.size(); i++) { // í˜ì–´ë§ëœ ë²„íŠ¼ ì´ë¯¸ì§€ë¥¼ í‘œì‹œ
 			pairList.get(i).getLeft().setButtonImg(printButtonImg(pairList.get(i).getLeft(), "blue"));
 			pairList.get(i).getRight().setButtonImg(printButtonImg(pairList.get(i).getRight(), "blue"));
 			pairList.get(i).getLeft().getButtonImg().addMouseListener(new PairingMouseAdapter(this));
 			pairList.get(i).getRight().getButtonImg().addMouseListener(new PairingMouseAdapter(this));
 		}
 
-		for (int i = 0; i < notPairList.size(); i++) { // Æä¾î¸µ µÇÁö ¾ÊÀº ¹öÆ° ÀÌ¹ÌÁö¸¦ Ç¥½Ã
+		for (int i = 0; i < notPairList.size(); i++) { // í˜ì–´ë§ ë˜ì§€ ì•Šì€ ë²„íŠ¼ ì´ë¯¸ì§€ë¥¼ í‘œì‹œ
 			notPairList.get(i).setButtonImg(printButtonImg(notPairList.get(i), "red"));
 			notPairList.get(i).getButtonImg().addMouseListener(new PairingMouseAdapter(this));
 		}
 
-		// for(int i=0; i<notPairList.size(); i++ ){ // Æä¾î¸µ µÇÁö ¾ÊÀº ¹öÆ° ÀÌ¹ÌÁö¸¦ »èÁ¦
+		// for(int i=0; i<notPairList.size(); i++ ){ // í˜ì–´ë§ ë˜ì§€ ì•Šì€ ë²„íŠ¼ ì´ë¯¸ì§€ë¥¼ ì‚­ì œ
 		//
 		// p.remove(notPairList.get(i).getButtonImg());
 		// }
-		
+
 	}
 
 	ArrayList<Pair> getPairList(){
 		return this.pairList;
 	}
-	
-	public void setSkeleton() { // »À´ë ¸¸µê
+
+	public void setSkeleton() { // ë¼ˆëŒ€ ë§Œë“¦
 		int max = 0;
-		for (int i = 0; i < 1000; i++) { // ³»ºÎ Á¡À¸·Î ÂïÀ½
-			if (i == 0 || i == 999) // ¸ğ¼­¸® ½ºÅµ
+		for (int i = 0; i < 1000; i++) { // ë‚´ë¶€ ì ìœ¼ë¡œ ì°ìŒ
+			if (i == 0 || i == 999) // ëª¨ì„œë¦¬ ìŠ¤í‚µ
 				continue;
 			for (int j = 0; j < 1000; j++) {
-				if (j == 0 || j == 999 || matrix[i][j] == 0) // ¸ğ¼­¸® ½ºÅµ, 0½ºÅµ
+				if (j == 0 || j == 999 || matrix[i][j] == 0) // ëª¨ì„œë¦¬ ìŠ¤í‚µ, 0ìŠ¤í‚µ
 					continue;
 
-				max = 0; // ÁÖº¯¿¡¼­ °¡Àå Å« °ª
-				for (int k = i - 1; k <= i + 1; k++) { // ÁÖº¯¿¡¼­ °¡Àå Å« °ª Ã£À½
+				max = 0; // ì£¼ë³€ì—ì„œ ê°€ì¥ í° ê°’
+				for (int k = i - 1; k <= i + 1; k++) { // ì£¼ë³€ì—ì„œ ê°€ì¥ í° ê°’ ì°¾ìŒ
 
-					for (int l = j - 1; l <= j + 1; l++) { // max°ªÀ» Ã£À½
+					for (int l = j - 1; l <= j + 1; l++) { // maxê°’ì„ ì°¾ìŒ
 						if (k == i && j == l)
 							continue;
 						if (matrix[k][l] > max)
@@ -111,7 +111,7 @@ public class LetterPairing {
 					}
 				}
 
-				if (matrix[i][j] >= max) // »À´ë°¡ ¸ÂÀ¸¸é ÁÂÇ¥¸¦ ³Ö´Â´Ù.
+				if (matrix[i][j] >= max) // ë¼ˆëŒ€ê°€ ë§ìœ¼ë©´ ì¢Œí‘œë¥¼ ë„£ëŠ”ë‹¤.
 					skeleton.add(new Coordinate(i, j));
 
 			}
@@ -119,7 +119,7 @@ public class LetterPairing {
 	}
 
 	void skeletonTest(int percent) {
-		JFrame f; // Ã¢
+		JFrame f; // ì°½
 		f = new JFrame("LetterPairing");
 		f.setSize(1000, 1000);
 		f.setVisible(true);
@@ -161,9 +161,9 @@ public class LetterPairing {
 		}
 	}
 
-	void skeletonSort() { // »À´ë¸¦ sorting ÇÏ´Â ÇÔ¼ö
-		double min = 9999999; // »À´ë ÁÂÇ¥ÇÑ¿¡¼­ ÇöÀç ÁÂÇ¥Áß¿¡ Á¦ÀÏ °¡±î¿î 4°³ÀÇ ÁÂÇ¥¸¸ sortingÇÑ ÈÄ ³Ñ¾î°¡´Â
-								// ¹æ½ÄÀ¸·Î sorting
+	void skeletonSort() { // ë¼ˆëŒ€ë¥¼ sorting í•˜ëŠ” í•¨ìˆ˜
+		double min = 9999999; // ë¼ˆëŒ€ ì¢Œí‘œí•œì—ì„œ í˜„ì¬ ì¢Œí‘œì¤‘ì— ì œì¼ ê°€ê¹Œìš´ 4ê°œì˜ ì¢Œí‘œë§Œ sortingí•œ í›„ ë„˜ì–´ê°€ëŠ”
+		// ë°©ì‹ìœ¼ë¡œ sorting
 		int minIdx = -1;
 		double distance;
 		int currentX;
@@ -196,7 +196,7 @@ public class LetterPairing {
 				skeleton.get(minIdx).moveTo(changedSkelCoordi.getX(), changedSkelCoordi.getY());
 				skeleton.get(i + j).moveTo(tempX, tempY);
 
-				min = 99999999; // min °ª ÃÊ±âÈ­
+				min = 99999999; // min ê°’ ì´ˆê¸°í™”
 
 			}
 		}
@@ -232,26 +232,26 @@ public class LetterPairing {
 
 	}
 
-	public void pairing() { // ÀÚµ¿À¸·Î Æä¾î¸µÀ» ÇØÁÖ´Â ÇÔ¼ö
+	public void pairing() { // ìë™ìœ¼ë¡œ í˜ì–´ë§ì„ í•´ì£¼ëŠ” í•¨ìˆ˜
 		int polyLength = polyCoordiList.size();
-		int nearSkelArray[] = new int[polyLength]; // °¢ ²ÀÁöÁ¡¿¡¼­ °¡Àå °¡±î¿î »À´ë¸¦ ´ã´Â ¹è¿­
+		int nearSkelArray[] = new int[polyLength]; // ê° ê¼­ì§€ì ì—ì„œ ê°€ì¥ ê°€ê¹Œìš´ ë¼ˆëŒ€ë¥¼ ë‹´ëŠ” ë°°ì—´
 		int prePairArray[] = new int[polyLength]; //
 
 		for (int i = 0; i < polyLength; i++)
 			nearSkelArray[i] = getNearSkelIdx(i);
 
-		System.out.print("°¡Àå °¡±î¿î »À´ë ³ª¿­:");
+		System.out.print("ê°€ì¥ ê°€ê¹Œìš´ ë¼ˆëŒ€ ë‚˜ì—´:");
 		for (int i = 0; i < nearSkelArray.length; i++)
 			System.out.print(nearSkelArray[i] + ", ");
 		System.out.println("");
 
-		for (int i = 0; i < nearSkelArray.length; i++) { // »À´ëÀÇ °Å¸®¸¦ ºñ±³ÇØ¼­ °¡Àå °¡±î¿î
-															// »À´ë¸¦ °¡Áø ÁÂÇ¥¸¦ Ã£À½¤±
+		for (int i = 0; i < nearSkelArray.length; i++) { // ë¼ˆëŒ€ì˜ ê±°ë¦¬ë¥¼ ë¹„êµí•´ì„œ ê°€ì¥ ê°€ê¹Œìš´
+			// ë¼ˆëŒ€ë¥¼ ê°€ì§„ ì¢Œí‘œë¥¼ ì°¾ìŒã…
 			double min = 999999999;
 			int idx = -1;
 			for (int j = 0; j < nearSkelArray.length; j++) {
 				if (i == j)
-					
+
 					continue;
 
 				int x1 = skeleton.get(nearSkelArray[i]).getX();
@@ -267,20 +267,20 @@ public class LetterPairing {
 			prePairArray[i] = idx;
 		}
 
-		System.out.print("¿¹ºñ pair ³ª¿­:");
+		System.out.print("ì˜ˆë¹„ pair ë‚˜ì—´:");
 		for (int i = 0; i < prePairArray.length; i++) {
 			System.out.print(prePairArray[i] + ",");
 		}
 
-		// ¼­·Î Â¦ÀÌ ¸ÂÀ¸¸é pair »ı¼º ÈÄ
+		// ì„œë¡œ ì§ì´ ë§ìœ¼ë©´ pair ìƒì„± í›„
 
 		for (int i = 0; i < prePairArray.length; i++) {
-			if (prePairArray[i] == -1) { // ÀÌ¹Ì Ã³¸®°¡ µÇ¾ú´Ù¸é
+			if (prePairArray[i] == -1) { // ì´ë¯¸ ì²˜ë¦¬ê°€ ë˜ì—ˆë‹¤ë©´
 				continue;
 			}
 
 			int pair = prePairArray[i];
-			if (prePairArray[pair] == i) {// ¼­·Î Â¦ÀÌ ¸ÂÀ¸¸é
+			if (prePairArray[pair] == i) {// ì„œë¡œ ì§ì´ ë§ìœ¼ë©´
 				// pairList.add(new Pair(polyCoordiList.get(i),
 				// polyCoordiList.get(pair)));
 				addPair(new Pair(i, pair, polyCoordiList));
@@ -289,7 +289,7 @@ public class LetterPairing {
 			}
 		}
 
-		for (int i = 0; i < prePairArray.length; i++) { // Æä¾î¸µÀÌ ¾ÈµÈ Á¡µéÀ» ¸®½ºÆ®¿¡ ³ÖÀ½
+		for (int i = 0; i < prePairArray.length; i++) { // í˜ì–´ë§ì´ ì•ˆëœ ì ë“¤ì„ ë¦¬ìŠ¤íŠ¸ì— ë„£ìŒ
 			if (prePairArray[i] != -1)
 				notPairList.add(polyCoordiList.get(i));
 		}
@@ -304,21 +304,21 @@ public class LetterPairing {
 		p.repaint();
 
 	}
-	// ÀÌº¥Æ® ¸®½º³Ê ¿¬µ¿À» ÇÏ·Á°í JLabelº¸´Ù »óÀ§ Å¬·¡½ºÀÎ Component¸¦ »ç¿ë
-	public Coordinate idfCoordiFromButton(Component button) { 
+	// ì´ë²¤íŠ¸ ë¦¬ìŠ¤ë„ˆ ì—°ë™ì„ í•˜ë ¤ê³  JLabelë³´ë‹¤ ìƒìœ„ í´ë˜ìŠ¤ì¸ Componentë¥¼ ì‚¬ìš©
+	public Coordinate idfCoordiFromButton(Component button) {
 		try {
 			for (int i = 0; i < polyCoordiList.size(); i++) {
 				if (button == polyCoordiList.get(i).getButtonImg()) {
 					return polyCoordiList.get(i);
 				}
 			}
-			throw new Exception("ÁÖ¾îÁø ¹öÆ°°ú °°Àº Coordinate°¡ Á¸ÀçÇÏÁö ¾ÊÀ½");
+			throw new Exception("ì£¼ì–´ì§„ ë²„íŠ¼ê³¼ ê°™ì€ Coordinateê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŒ");
 		} catch (Exception e) {
 			e.getMessage();
 			return null;
 		}
 	}
-	
+
 	public Pair idfPairFromButton(Component button){
 		Coordinate c = idfCoordiFromButton(button);
 		try{
@@ -326,7 +326,7 @@ public class LetterPairing {
 				if(p.getLeft() == c || p.getRight() == c)
 					return p;
 			}
-			throw new Exception("ÁÖ¾îÁø ¹öÆ°ÀÌ ¼ÓÇÑ Pair¸¦ Ã£À» ¼ö ¾øÀ½");
+			throw new Exception("ì£¼ì–´ì§„ ë²„íŠ¼ì´ ì†í•œ Pairë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŒ");
 		} catch(Exception e){
 			e.getMessage();
 			return null;
@@ -335,16 +335,16 @@ public class LetterPairing {
 
 	public void startChangePairMode(Component button){
 		changePairButton = button;
-		
-		if(isPairChangeMode()) //µÎ¹øÂ° Å¬¸¯ÀÏ ¶§
+
+		if(isPairChangeMode()) //ë‘ë²ˆì§¸ í´ë¦­ì¼ ë•Œ
 		{
-			System.out.println("ÀÌ¹Ì PairChangeModeÀÔ´Ï´Ù.");
-			
+			System.out.println("ì´ë¯¸ PairChangeModeì…ë‹ˆë‹¤.");
+
 		}
-		
+
 		changePairFlag = true;
 	}
-	
+
 	public boolean isPairChangeMode(){
 		return changePairFlag;
 	}
@@ -352,122 +352,122 @@ public class LetterPairing {
 		return genPairFlag;
 	}
 	public void abortChangePairMode(){
-		System.out.println("change pair ¸ğµå ³¡");
+		System.out.println("change pair ëª¨ë“œ ë");
 		changePairFlag = false;
 		changePairButton = null;
 	}
-	
-	
-	public void genPair(Component button) { // ¼öµ¿À¸·Î Æä¾î¸µÀ» ÇØÁÖ´Â ÇÔ¼ö ,  label¸¸ Ãâ·ÂÇØÁÖ¸é µÉµí
-		
-		if (genPairFlag) // ÀÌ¹Ì ÇÑ°³°¡ ¼±ÅÃµÇ¾ú´ø »óÈ²
+
+
+	public void genPair(Component button) { // ìˆ˜ë™ìœ¼ë¡œ í˜ì–´ë§ì„ í•´ì£¼ëŠ” í•¨ìˆ˜ ,  labelë§Œ ì¶œë ¥í•´ì£¼ë©´ ë ë“¯
+
+		if (genPairFlag) // ì´ë¯¸ í•œê°œê°€ ì„ íƒë˜ì—ˆë˜ ìƒí™©
 		{
 			genPairArr[1] = button;
 
-			// Æä¾î¸¦ »ı¼ºÇØ¼­ ¸®½ºÆ®¿¡ Ãß°¡ÇÔ
+			// í˜ì–´ë¥¼ ìƒì„±í•´ì„œ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€í•¨
 			Pair newPair = new Pair(idfCoordiFromButton(genPairArr[0]), idfCoordiFromButton(genPairArr[1]));
-			//pair»ı¼ºÀÚ°¡ ÀÚµ¿À¸·Î Æä¾î¸µµÈ Pair °´Ã¼ »ı¼ºÀÚ¿Í ´Ù¸£´Ù -> left, right idx ÃÊ±âÈ­°¡ ¾ÈµÊ.
+			//pairìƒì„±ìê°€ ìë™ìœ¼ë¡œ í˜ì–´ë§ëœ Pair ê°ì²´ ìƒì„±ìì™€ ë‹¤ë¥´ë‹¤ -> left, right idx ì´ˆê¸°í™”ê°€ ì•ˆë¨.
 			addPair(newPair);
-			 //ÃÊ±âÈ­
+			//ì´ˆê¸°í™”
 			genPairArr[0] = null;
 			genPairArr[1] = null;
 			genPairFlag = false;
 			abortChangePairMode();
-			
-			System.out.println("¹öÆ° µÎ °³ ¼±ÅÃ¿Ï·á Æä¾î°¡ Ãß°¡µÊ");
-			// UI ¿¡ Ãß°¡
-			// ¿ø·¡ »¡°£»öÀ¸·Î µÇ¾îÀÖ´ø ¹öÆ°À» Áö¿ì°í ÆÄ¶õ»öÀ¸·Î ¹Ù²ã¾ßÇÔ->ÀÏ´Ü µÑ ´Ù Áö¿ì´Â°É·Î ¸¸µê
-			
+
+			System.out.println("ë²„íŠ¼ ë‘ ê°œ ì„ íƒì™„ë£Œ í˜ì–´ê°€ ì¶”ê°€ë¨");
+			// UI ì— ì¶”ê°€
+			// ì›ë˜ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ë˜ì–´ìˆë˜ ë²„íŠ¼ì„ ì§€ìš°ê³  íŒŒë€ìƒ‰ìœ¼ë¡œ ë°”ê¿”ì•¼í•¨->ì¼ë‹¨ ë‘˜ ë‹¤ ì§€ìš°ëŠ”ê±¸ë¡œ ë§Œë“¦
+
 			p.remove(newPair.getLeft().getButtonImg());
 			p.remove(newPair.getRight().getButtonImg());
-			
+
 			p.add(newPair.getLeftLabel());
 			p.add(newPair.getRightLabel());
-			
+
 			JLabel leftButton = printButtonImg(newPair.getLeft(), "blue");
 			JLabel rightButton = printButtonImg(newPair.getRight(), "blue");
-			
+
 			newPair.getLeft().setButtonImg(leftButton);
 			newPair.getRight().setButtonImg(rightButton);
 			leftButton.addMouseListener(new PairingMouseAdapter(this));
 			rightButton.addMouseListener(new PairingMouseAdapter(this));
-			
+
 			p.repaint();
 
-		} else { // Ã³À½ ¼±ÅÃµÈ »óÈ²
+		} else { // ì²˜ìŒ ì„ íƒëœ ìƒí™©
 			genPairArr[0] = button;
 			genPairFlag = true;
-			System.out.println("¹öÆ°ÇÏ³ª ¼±ÅÃ");
+			System.out.println("ë²„íŠ¼í•˜ë‚˜ ì„ íƒ");
 		}
 
 	}
 	public void genPair(){
 		genPair(changePairButton);
 	}
-	
+
 	public void removePair(){
 		if(changePairFlag){
-			//´­·¯Áø ¹öÆ°ÀÇ pair¸¦ Ã£¾Æ¼­ 
+			//ëˆŒëŸ¬ì§„ ë²„íŠ¼ì˜ pairë¥¼ ì°¾ì•„ì„œ
 			Pair pair = idfPairFromButton(changePairButton);
-			removeFromPanel(pair);// È­¸é»ó¿¡¼­ Áö¿ì°í
-			//»¡°£ ¹öÆ°À¸·Î »õ·Î Ãâ·ÂÇÔ
+			removeFromPanel(pair);// í™”ë©´ìƒì—ì„œ ì§€ìš°ê³ 
+			//ë¹¨ê°„ ë²„íŠ¼ìœ¼ë¡œ ìƒˆë¡œ ì¶œë ¥í•¨
 			JLabel leftButton = printButtonImg(pair.getLeft(), "red");
 			JLabel rightButton = printButtonImg(pair.getRight(), "red");
 			pair.getLeft().setButtonImg(leftButton);
 			pair.getRight().setButtonImg(rightButton);
-			
-			//¾ø¾îÁö´Â ºÎºĞ.. ¹«¾ùÀÌ ¾ø¾îÁö³ª...?
-			//Ãß°¡µÈ ¹öÆ°ÀÇ ¸¶¿ì½º ¸®½º³Ê µî·Ï
+
+			//ì—†ì–´ì§€ëŠ” ë¶€ë¶„.. ë¬´ì—‡ì´ ì—†ì–´ì§€ë‚˜...?
+			//ì¶”ê°€ëœ ë²„íŠ¼ì˜ ë§ˆìš°ìŠ¤ ë¦¬ìŠ¤ë„ˆ ë“±ë¡
 			leftButton.addMouseListener(new PairingMouseAdapter(this));
 			rightButton.addMouseListener(new PairingMouseAdapter(this));
-			//¸®½ºÆ®¿¡¼­ »èÁ¦
+			//ë¦¬ìŠ¤íŠ¸ì—ì„œ ì‚­ì œ
 			pairList.remove(pair);
 			p.repaint();
 			abortChangePairMode();
-		}	
+		}
 	}
-	public void switchLR(){ //¹öÆ°ÀÌ ¿À´Â °ÍÀÌ ¾Æ´Ï¶ó
-		
+	public void switchLR(){ //ë²„íŠ¼ì´ ì˜¤ëŠ” ê²ƒì´ ì•„ë‹ˆë¼
+
 		if(changePairFlag){
 			Pair pair = idfPairFromButton(changePairButton);
 			removeFromPanel(pair);
-			
+
 			pair.switchLR();
 			printOnPanel(pair);
 			p.repaint();
 			abortChangePairMode();
-			
+
 		}
 		else
 		{
-			System.out.println("changePair¸ğµå°¡ ¾Æ´Ñµ¥ switch ¿ä±¸");
+			System.out.println("changePairëª¨ë“œê°€ ì•„ë‹Œë° switch ìš”êµ¬");
 		}
-				
+
 	}
-	public void removeFromPanel(Pair pair){  //È­¸é»ó¿¡¼­ Áö¿ì´Â ºÎºĞ
-		p.remove(pair.getLeft().getButtonImg()); // È­¸é»ó¿¡¼­ ¹öÆ° »èÁ¦
+	public void removeFromPanel(Pair pair){  //í™”ë©´ìƒì—ì„œ ì§€ìš°ëŠ” ë¶€ë¶„
+		p.remove(pair.getLeft().getButtonImg()); // í™”ë©´ìƒì—ì„œ ë²„íŠ¼ ì‚­ì œ
 		p.remove(pair.getRight().getButtonImg());
-		
-		//polyButtonList.remove(pair.getLeft().getButtonImg());  //°íÃÄ¾ßÇÔ
+
+		//polyButtonList.remove(pair.getLeft().getButtonImg());  //ê³ ì³ì•¼í•¨
 		//polyButtonList.remove(pair.getRight().getButtonImg());
-		p.remove(pair.getLeftLabel());  //È­¸é»ó¿¡¼­ label»èÁ¦
+		p.remove(pair.getLeftLabel());  //í™”ë©´ìƒì—ì„œ labelì‚­ì œ
 		p.remove(pair.getRightLabel());
 	}
-	
+
 	public void printOnPanel(Pair pair){
 		p.add(pair.getLeftLabel());
 		p.add(pair.getRightLabel());
-		
+
 		//polyButtonList.add(pair.getLeft().getButtonImg());
 		//polyButtonList.add(pair.getRight().getButtonImg());
-		
+
 		p.add(pair.getLeft().getButtonImg());
 		p.add(pair.getRight().getButtonImg());
 	}
-	
-	//pair¸¦ ¸®½ºÆ®¿¡ Ãß°¡ÇÏ´Â ÇÔ¼ö pair¸¦ Ãß°¡ÇÒ¶§´Â Ç×»ó ÀÌ ÇÔ¼ö¸¦ ÅëÇØ Ãß°¡ÇÑ´Ù.
-	public void addPair(Pair pair) { 
-		pair.setPairNum(++pairCount); // pairNum ÃÊ±âÈ­ // ÀÌ·¸°Ô ÇÏ¸é Áß°£¿¡ ¾ø¾İÀ» ¶§ ¹®Á¦°¡µÊ..
+
+	//pairë¥¼ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜ pairë¥¼ ì¶”ê°€í• ë•ŒëŠ” í•­ìƒ ì´ í•¨ìˆ˜ë¥¼ í†µí•´ ì¶”ê°€í•œë‹¤.
+	public void addPair(Pair pair) {
+		pair.setPairNum(++pairCount); // pairNum ì´ˆê¸°í™” // ì´ë ‡ê²Œ í•˜ë©´ ì¤‘ê°„ì— ì—†ì•´ì„ ë•Œ ë¬¸ì œê°€ë¨..
 		pair.setLabel();                                   //
 		pairList.add(pair);
 	}
@@ -476,17 +476,17 @@ public class LetterPairing {
 		boolean isChange = true;
 
 		int max = 0;
-		while (isChange) { // ¼öÁ¤»çÇ×ÀÌ ¾øÀ» ¶§ ±îÁö °Å¸®°è»êÀ» ÇÑ´Ù
+		while (isChange) { // ìˆ˜ì •ì‚¬í•­ì´ ì—†ì„ ë•Œ ê¹Œì§€ ê±°ë¦¬ê³„ì‚°ì„ í•œë‹¤
 
 			isChange = false;
 			for (int i = 0; i < 1000; i++) {
-				if (i == 0 || i == 999) // ¸ğ¼­¸® ½ºÅµ
+				if (i == 0 || i == 999) // ëª¨ì„œë¦¬ ìŠ¤í‚µ
 					continue;
 				for (int j = 0; j < 1000; j++) {
-					if (j == 0 || j == 999 || mtx[i][j] == 0) // ¸ğ¼­¸® ½ºÅµ, 0½ºÅµ
+					if (j == 0 || j == 999 || mtx[i][j] == 0) // ëª¨ì„œë¦¬ ìŠ¤í‚µ, 0ìŠ¤í‚µ
 						continue;
 					int min = 10000;
-					for (int k = i - 1; k <= i + 1; k++) { // ÁÖº¯¿¡¼­ °¡Àå ÀÛÀº°ª Ã£À½
+					for (int k = i - 1; k <= i + 1; k++) { // ì£¼ë³€ì—ì„œ ê°€ì¥ ì‘ì€ê°’ ì°¾ìŒ
 						for (int l = j - 1; l <= j + 1; l++) {
 							if (mtx[k][l] < min)
 								min = mtx[k][l];
@@ -497,8 +497,8 @@ public class LetterPairing {
 						isChange = true;
 						mtx[i][j] = min + 1;
 
-						if (max < mtx[i][j] && poly.inside(i, j)) // ¿Ü°¢¼±°ú °¡Àå ¸Õ
-																	// °Å¸®
+						if (max < mtx[i][j] && poly.inside(i, j)) // ì™¸ê°ì„ ê³¼ ê°€ì¥ ë¨¼
+							// ê±°ë¦¬
 							max = mtx[i][j];
 					}
 				}
@@ -506,28 +506,28 @@ public class LetterPairing {
 		}
 	}
 
-	public void findGarbageSkel() { // »ßÁ®³ª¿À´Â ¾²·¹±â ÁÂÇ¥°ªµéÀ» Ã£¾Æ³»´Â ÇÔ¼öÀÓ
+	public void findGarbageSkel() { // ì‚ì ¸ë‚˜ì˜¤ëŠ” ì“°ë ˆê¸° ì¢Œí‘œê°’ë“¤ì„ ì°¾ì•„ë‚´ëŠ” í•¨ìˆ˜ì„
 		garbageCoordiList = new ArrayList<Integer>();
 
 		double distance;
 
-		System.out.print("¾²·¹±âÁÂÇ¥°ª: ");
-		for (int i = 0; i < skeleton.size(); i++) { // ¸ğµç »À´ë ÁÂÇ¥¿¡¼­ °Ë»ö
+		System.out.print("ì“°ë ˆê¸°ì¢Œí‘œê°’: ");
+		for (int i = 0; i < skeleton.size(); i++) { // ëª¨ë“  ë¼ˆëŒ€ ì¢Œí‘œì—ì„œ ê²€ìƒ‰
 			for (int j = 0; j < polyCoordiList.size(); j++) {
 
-				distance = getDistance(skeleton.get(i), polyCoordiList.get(j)); // »À´ë
-																				// ÁÂÇ¥¿Í
-																				// ¿Ü°¢¼±
-																				// ²ÀÁöÁ¡
-																				// »çÀÌÀÇ
-																				// °Å¸®¸¦
-																				// ±¸ÇÔ
+				distance = getDistance(skeleton.get(i), polyCoordiList.get(j)); // ë¼ˆëŒ€
+				// ì¢Œí‘œì™€
+				// ì™¸ê°ì„ 
+				// ê¼­ì§€ì 
+				// ì‚¬ì´ì˜
+				// ê±°ë¦¬ë¥¼
+				// êµ¬í•¨
 				if (distance < 9) {
 					// printButtonImg(skeleton.get(i));
 					System.out.println(
 							"index: " + i + ",polyIdx: " + j + ", distance: " + Math.round(distance * 100) / 100.0);
-					int endIdx = findEndIdx(i, j); // ÇÏ³ª Ã£À» ¶§ ¸¶´Ù Áö¿ì´Â °úÁ¤À» °ÅÄ£ ´ÙÀ½
-													// ´ÙÀ½°ÍÀ» Ã£¾Æ¾ßÇÑ´Ù.
+					int endIdx = findEndIdx(i, j); // í•˜ë‚˜ ì°¾ì„ ë•Œ ë§ˆë‹¤ ì§€ìš°ëŠ” ê³¼ì •ì„ ê±°ì¹œ ë‹¤ìŒ
+					// ë‹¤ìŒê²ƒì„ ì°¾ì•„ì•¼í•œë‹¤.
 					deleteGarbageSkel(endIdx);
 					i = 0;
 					j = 0;
@@ -537,20 +537,20 @@ public class LetterPairing {
 					break;
 				}
 			}
-			break; // ÇÏ³ª¸¸ Ã£°í ³ª°¡°Ô ÇÏ´Â break
+			break; // í•˜ë‚˜ë§Œ ì°¾ê³  ë‚˜ê°€ê²Œ í•˜ëŠ” break
 		}
 		for (int i = 0; i < garbageCoordiList.size(); i++) {
 			System.out.print(garbageCoordiList.get(i) + ", ");
 		}
-		System.out.println("\n¾²·¹±â ÁÂÇ¥ ¼ö: " + garbageCoordiList.size());
+		System.out.println("\nì“°ë ˆê¸° ì¢Œí‘œ ìˆ˜: " + garbageCoordiList.size());
 
 	}
 
-	public int findEndIdx(int skelIdx, int polyIdx) { // ÀÔ·Â¹ŞÀº ÀÎµ¦½º¸¦ Æ÷ÇÔÇÏ´Â »À´ëÀÇ ³¡
-														// ºÎºĞÀ» Ã£¾ÆÁÖ´Â ÇÔ¼ö
+	public int findEndIdx(int skelIdx, int polyIdx) { // ì…ë ¥ë°›ì€ ì¸ë±ìŠ¤ë¥¼ í¬í•¨í•˜ëŠ” ë¼ˆëŒ€ì˜ ë
+		// ë¶€ë¶„ì„ ì°¾ì•„ì£¼ëŠ” í•¨ìˆ˜
 		if (skelIdx == 1639)
 			System.out.println("test");
-		// °æ°èÁ¶°Ç È®ÀÎÇØ¾ßÇÔ..
+		// ê²½ê³„ì¡°ê±´ í™•ì¸í•´ì•¼í•¨..
 		double currentDistance = getDistance(skeleton.get(skelIdx), polyCoordiList.get(polyIdx));
 		double preDistance = 999999999;
 		double nextDistance = 999999999;
@@ -559,12 +559,12 @@ public class LetterPairing {
 		if (skelIdx != skeleton.size() - 1)
 			nextDistance = getDistance(skeleton.get(skelIdx + 1), polyCoordiList.get(polyIdx));
 
-		if (currentDistance < preDistance && currentDistance < nextDistance) // ÇöÀç
-																				// »À´ë°¡
-																				// ¿Ü°¢¼±°ú
-																				// °¡Àå
-																				// °¡±î¿î
-																				// °æ¿ì
+		if (currentDistance < preDistance && currentDistance < nextDistance) // í˜„ì¬
+			// ë¼ˆëŒ€ê°€
+			// ì™¸ê°ì„ ê³¼
+			// ê°€ì¥
+			// ê°€ê¹Œìš´
+			// ê²½ìš°
 			return skelIdx;
 		else if (preDistance < nextDistance)
 			return findEndIdx(skelIdx - 1, polyIdx);
@@ -573,15 +573,15 @@ public class LetterPairing {
 
 	}
 
-	// public void deleteGarbageSkel(int idx){ //¾²·¹±â »À´ëÀÇ ³¡ºÎºĞÀ» ¹Ş¾Æ¼­ ÀÌ¾îÁø ¾²·¹±â »À´ëµéÀ»
-	// ¸ğµÎ »èÁ¦ÇÏ´Â ÇÔ¼öÀÌ´Ù.
-	// //¾²·¹±â »À´ë´Â ÁÂÇ¥ÀÇ ¹Ğµµ°¡ ³·Àº Æ¯Â¡À» »ç¿ëÇÑ´Ù.
-	// //ÀÔ·Â¹ŞÀº »À´ë ÁÂÇ¥ÀÇ ÀÎµ¦½º°¡ °¡Àå ³¡ºÎºĞ¿¡ ÇØ´çÇÏ´ÂÁö È®ÀÎ
+	// public void deleteGarbageSkel(int idx){ //ì“°ë ˆê¸° ë¼ˆëŒ€ì˜ ëë¶€ë¶„ì„ ë°›ì•„ì„œ ì´ì–´ì§„ ì“°ë ˆê¸° ë¼ˆëŒ€ë“¤ì„
+	// ëª¨ë‘ ì‚­ì œí•˜ëŠ” í•¨ìˆ˜ì´ë‹¤.
+	// //ì“°ë ˆê¸° ë¼ˆëŒ€ëŠ” ì¢Œí‘œì˜ ë°€ë„ê°€ ë‚®ì€ íŠ¹ì§•ì„ ì‚¬ìš©í•œë‹¤.
+	// //ì…ë ¥ë°›ì€ ë¼ˆëŒ€ ì¢Œí‘œì˜ ì¸ë±ìŠ¤ê°€ ê°€ì¥ ëë¶€ë¶„ì— í•´ë‹¹í•˜ëŠ”ì§€ í™•ì¸
 	// Coordinate preSkel, nextSkel;
 	// Coordinate currentSkel = skeleton.get(idx);
-	// int direction = 0; //1ÀÌ¸é Á¤¹æÇâ ,-1ÀÌ¸é ¿ª¹æÇâ
+	// int direction = 0; //1ì´ë©´ ì •ë°©í–¥ ,-1ì´ë©´ ì—­ë°©í–¥
 	//
-	// if(idx !=0 && idx != skeleton.size()-1){ //»À´ë°¡ »èÁ¦µÉ ¹æÇâÀ» Á¤ÇÔ
+	// if(idx !=0 && idx != skeleton.size()-1){ //ë¼ˆëŒ€ê°€ ì‚­ì œë  ë°©í–¥ì„ ì •í•¨
 	// preSkel = skeleton.get(idx-1);
 	// nextSkel = skeleton.get(idx+1);
 	// if(getDistance(preSkel, currentSkel) < getDistance(nextSkel,
@@ -590,42 +590,42 @@ public class LetterPairing {
 	// else
 	// direction = 1;
 	// }
-	// else if(idx == 0) // ÀÔ·ÂµÈ ÀÎµ¦½º°¡ 0ÀÎ °æ¿ì ¾ÕÀ¸·Î ¸®½ºÆ®ÀÇ µŞÂÊÀ¸·Î ÀÌµ¿ÇÏ¸é¼­ »èÁ¦ÇÑ´Ù
+	// else if(idx == 0) // ì…ë ¥ëœ ì¸ë±ìŠ¤ê°€ 0ì¸ ê²½ìš° ì•ìœ¼ë¡œ ë¦¬ìŠ¤íŠ¸ì˜ ë’·ìª½ìœ¼ë¡œ ì´ë™í•˜ë©´ì„œ ì‚­ì œí•œë‹¤
 	// direction = 1;
-	// else //¸¶Áö¸·ÀÎ °æ¿ì ¾ÕÂÊÀ¸·Î~
+	// else //ë§ˆì§€ë§‰ì¸ ê²½ìš° ì•ìª½ìœ¼ë¡œ~
 	// direction = -1;
 	//
 	//
-	// ////////////Áö¿ì´Â ºÎºĞ///////////////
+	// ////////////ì§€ìš°ëŠ” ë¶€ë¶„///////////////
 	// int i = idx;
 	// double distance;
 	// boolean isGarbageEnd = true;
-	// System.out.println("---------»À´ëÁÂÇ¥°Å¸®---------");
+	// System.out.println("---------ë¼ˆëŒ€ì¢Œí‘œê±°ë¦¬---------");
 	//
 	// while(i >= 0 && i < skeleton.size()){
 	// currentSkel = skeleton.get(i);
-	// if(i == 0 && direction == -1) //³¡¿¡ µµ´Ş
+	// if(i == 0 && direction == -1) //ëì— ë„ë‹¬
 	// break;
-	// if((i == skeleton.size() && direction == 1)) //³¡¿¡ µµ´Ş
+	// if((i == skeleton.size() && direction == 1)) //ëì— ë„ë‹¬
 	// break;
-	// // ´ÙÀ½ 3°³ÀÇ ÁÂÇ¥¸¦ °Ë»çÇØ¼­ 3°³ ÀÌ»ó ÀÌ¾îÁ® ÀÖÀ¸¸é ¾²·¹±â »À´ë°¡ ³¡³ª´Â °ÍÀ¸·Î °£ÁÖ
-	// // ¼­·Î °Å¸®°¡ 2 ÀÌ»óÀÎ ÁÂÇ¥°¡ ¿¬¼ÓÀûÀ¸·Î ¹è¿­µÇ¾î ÀÖÀ¸¸é ¾²·¹±â ÁÂÇ¥·Î °£ÁÖÇÑ´Ù.
+	// // ë‹¤ìŒ 3ê°œì˜ ì¢Œí‘œë¥¼ ê²€ì‚¬í•´ì„œ 3ê°œ ì´ìƒ ì´ì–´ì ¸ ìˆìœ¼ë©´ ì“°ë ˆê¸° ë¼ˆëŒ€ê°€ ëë‚˜ëŠ” ê²ƒìœ¼ë¡œ ê°„ì£¼
+	// // ì„œë¡œ ê±°ë¦¬ê°€ 2 ì´ìƒì¸ ì¢Œí‘œê°€ ì—°ì†ì ìœ¼ë¡œ ë°°ì—´ë˜ì–´ ìˆìœ¼ë©´ ì“°ë ˆê¸° ì¢Œí‘œë¡œ ê°„ì£¼í•œë‹¤.
 	// for(int j=1; j <= 3; j++){
 	// nextSkel = skeleton.get(i + (direction*j));
 	// distance = getDistance(currentSkel, nextSkel);
 	// if(distance > 2)
-	// //¾²·¹±â ÁÂÇ¥ÀÓ »èÁ¦ ÇÏ´Â °úÁ¤ÀÌ µé¾î°¡¾ßÇÔ
-	// //Á¤¹æÇâÀÌ¸é ±×³É »èÁ¦ ¿ª¹æÇâÀÌ¸é ÇÏ³ª¾¿ ¾Õ´ç±â¸é¼­ »èÁ¦ÇØ¾ßÇÑ´Ù
+	// //ì“°ë ˆê¸° ì¢Œí‘œì„ ì‚­ì œ í•˜ëŠ” ê³¼ì •ì´ ë“¤ì–´ê°€ì•¼í•¨
+	// //ì •ë°©í–¥ì´ë©´ ê·¸ëƒ¥ ì‚­ì œ ì—­ë°©í–¥ì´ë©´ í•˜ë‚˜ì”© ì•ë‹¹ê¸°ë©´ì„œ ì‚­ì œí•´ì•¼í•œë‹¤
 	// {
 	//
-	// if(direction == 1){ // Á¤¹æÇâ
+	// if(direction == 1){ // ì •ë°©í–¥
 	// for(int k=0; k<j; k++){
 	// skeleton.remove(i);
 	//
 	// }
 	// }
 	//
-	// else{ ///¿ª¹æÇâ
+	// else{ ///ì—­ë°©í–¥
 	// for(int k=0; k<j; k++){
 	// skeleton.remove(i--);
 	// }
@@ -634,13 +634,13 @@ public class LetterPairing {
 	// break;
 	// }
 	//
-	// if(j == 3) { // ¾²·¹±â ÁÂÇ¥°¡ ³¡³­°ÍÀÓ ÇÔ¼ö¸¦ Á¾·áÇØ¾ßÇÔ
+	// if(j == 3) { // ì“°ë ˆê¸° ì¢Œí‘œê°€ ëë‚œê²ƒì„ í•¨ìˆ˜ë¥¼ ì¢…ë£Œí•´ì•¼í•¨
 	// isGarbageEnd = true;
 	// break;
 	// }
 	// }
 	//
-	// if(isGarbageEnd) {// ³¡³­°æ¿ì
+	// if(isGarbageEnd) {// ëë‚œê²½ìš°
 	//
 	// break;
 	// }
@@ -650,27 +650,27 @@ public class LetterPairing {
 	// }
 	// }
 
-	// -> ¾²Áö ¾Ê´Â ÀÌÀ¯ : ¾²·¹±â »À´ë·Î ÀÎ½ÄÇÏ´Âµ¥ ¹Ğµµ°¡ ³ôÀ¸¸é ¹«ÇÑ·çÇÁ°¡ µ·´Ù~
+	// -> ì“°ì§€ ì•ŠëŠ” ì´ìœ  : ì“°ë ˆê¸° ë¼ˆëŒ€ë¡œ ì¸ì‹í•˜ëŠ”ë° ë°€ë„ê°€ ë†’ìœ¼ë©´ ë¬´í•œë£¨í”„ê°€ ëˆë‹¤~
 
-	public void deleteGarbageSkel(int idx) { // ¾²·¹±â ÁÂÇ¥ÀÇ ³¡ idx¸¦ Àü´Ş¹Ş¾Æ¼­ ¾²·¹±â ÁÂÇ¥°¡ ³¡³¯¶§
-												// ±îÁö »èÁ¦¸¦ ÇÑ´Ù ±â¿ï±â ¹öÁ¯
+	public void deleteGarbageSkel(int idx) { // ì“°ë ˆê¸° ì¢Œí‘œì˜ ë idxë¥¼ ì „ë‹¬ë°›ì•„ì„œ ì“°ë ˆê¸° ì¢Œí‘œê°€ ëë‚ ë•Œ
+		// ê¹Œì§€ ì‚­ì œë¥¼ í•œë‹¤ ê¸°ìš¸ê¸° ë²„ì ¼
 
-		// ÀÔ·Â¹ŞÀº »À´ë ÁÂÇ¥ÀÇ ÀÎµ¦½º°¡ °¡Àå ³¡ºÎºĞ¿¡ ÇØ´çÇÏ´ÂÁö È®ÀÎ
+		// ì…ë ¥ë°›ì€ ë¼ˆëŒ€ ì¢Œí‘œì˜ ì¸ë±ìŠ¤ê°€ ê°€ì¥ ëë¶€ë¶„ì— í•´ë‹¹í•˜ëŠ”ì§€ í™•ì¸
 		Coordinate preSkel, nextSkel;
 		Coordinate currentSkel = skeleton.get(idx);
-		int idxDirection = 0; // 1ÀÌ¸é Á¤¹æÇâ ,-1ÀÌ¸é ¿ª¹æÇâ
+		int idxDirection = 0; // 1ì´ë©´ ì •ë°©í–¥ ,-1ì´ë©´ ì—­ë°©í–¥
 
-		if (idx != 0 && idx != skeleton.size() - 1) { // »À´ë°¡ »èÁ¦µÉ ¹æÇâÀ» Á¤ÇÔ
+		if (idx != 0 && idx != skeleton.size() - 1) { // ë¼ˆëŒ€ê°€ ì‚­ì œë  ë°©í–¥ì„ ì •í•¨
 			preSkel = skeleton.get(idx - 1);
 			nextSkel = skeleton.get(idx + 1);
-			//³¡ÀÇ ÁÂÇ¥°¡ µé¾î¿À±â ¶§¹®¿¡ °Å¸®°¡ ´õ °¡±î¿ì¸é ¹æÇâÀ¸·Î ÇÔ
+			//ëì˜ ì¢Œí‘œê°€ ë“¤ì–´ì˜¤ê¸° ë•Œë¬¸ì— ê±°ë¦¬ê°€ ë” ê°€ê¹Œìš°ë©´ ë°©í–¥ìœ¼ë¡œ í•¨
 			if (getDistance(preSkel, currentSkel) < getDistance(nextSkel, currentSkel))
 				idxDirection = -1;
 			else
 				idxDirection = 1;
-		} else if (idx == 0) // ÀÔ·ÂµÈ ÀÎµ¦½º°¡ 0ÀÎ °æ¿ì ¾ÕÀ¸·Î ¸®½ºÆ®ÀÇ µŞÂÊÀ¸·Î ÀÌµ¿ÇÏ¸é¼­ »èÁ¦ÇÑ´Ù
+		} else if (idx == 0) // ì…ë ¥ëœ ì¸ë±ìŠ¤ê°€ 0ì¸ ê²½ìš° ì•ìœ¼ë¡œ ë¦¬ìŠ¤íŠ¸ì˜ ë’·ìª½ìœ¼ë¡œ ì´ë™í•˜ë©´ì„œ ì‚­ì œí•œë‹¤
 			idxDirection = 1;
-		else // ¸¶Áö¸·ÀÎ °æ¿ì ¾ÕÂÊÀ¸·Î~
+		else // ë§ˆì§€ë§‰ì¸ ê²½ìš° ì•ìª½ìœ¼ë¡œ~
 			idxDirection = -1;
 
 		/////////////////
@@ -690,52 +690,52 @@ public class LetterPairing {
 		ArrayList<Integer> indexList1 = new ArrayList<Integer>();
 		ArrayList<Integer> indexList2 = new ArrayList<Integer>();
 
-		indexList1.add(idx); // Ã³À½ÁÂÇ¥ ÀÔ·Â
+		indexList1.add(idx); // ì²˜ìŒì¢Œí‘œ ì…ë ¥
 
-		x1 = skeleton.get(idx).getX(); // ÃÊ±â°ªÀ» Ã³À½ µé¾î¿Â ÀÎµ¦½ºÀÇ ÁÂÇ¥·Î ÃÊ±âÈ­
+		x1 = skeleton.get(idx).getX(); // ì´ˆê¸°ê°’ì„ ì²˜ìŒ ë“¤ì–´ì˜¨ ì¸ë±ìŠ¤ì˜ ì¢Œí‘œë¡œ ì´ˆê¸°í™”
 		y1 = skeleton.get(idx).getY();
 
 		int faultCnt = 0;
 		int xDirection;
 		int searchIdx = idx;
 		int preSearchIdx = 0;
-		if (skeleton.get(idx1 + (idxDirection * gap)).getX() - skeleton.get(idx1).getX() > 0) // xÁÂÇ¥ÀÇ
-																								// ¹æÇâÀ»
-																								// Á¤ÇÔ
+		if (skeleton.get(idx1 + (idxDirection * gap)).getX() - skeleton.get(idx1).getX() > 0) // xì¢Œí‘œì˜
+			// ë°©í–¥ì„
+			// ì •í•¨
 			xDirection = 1;
 		else if (skeleton.get(idx1 + (idxDirection * gap)).getX() - skeleton.get(idx1).getX() < 0)
 			xDirection = -1;
 		else {
-			System.out.println("Å½»öÇÒ x¹æÇâÀÌ ¾È³ª¿È");
+			System.out.println("íƒìƒ‰í•  xë°©í–¥ì´ ì•ˆë‚˜ì˜´");
 			xDirection = 0;
 		}
-		// ¿©±âºÎÅÍ µÎ¹øÂ° x°ªÀ» °¡Áø ÁÂÇ¥µéÀ» ¹­´Â ºÎºĞ
+		// ì—¬ê¸°ë¶€í„° ë‘ë²ˆì§¸ xê°’ì„ ê°€ì§„ ì¢Œí‘œë“¤ì„ ë¬¶ëŠ” ë¶€ë¶„
 		while (true) {
-			// ±â¿ï±â Ã¼Å©ÇØ¼­ x°ªÀ» ¿Ã¸®¸é¼­ Å½»öÇØ³ª°¥°ÍÀÎÁö ³»¸®¸é¼­ ÇÒ °ÍÀÎÁö¸¦ °áÁ¤
+			// ê¸°ìš¸ê¸° ì²´í¬í•´ì„œ xê°’ì„ ì˜¬ë¦¬ë©´ì„œ íƒìƒ‰í•´ë‚˜ê°ˆê²ƒì¸ì§€ ë‚´ë¦¬ë©´ì„œ í•  ê²ƒì¸ì§€ë¥¼ ê²°ì •
 
 			x2 = x1 + (xDirection * gap);
 
-			// ±âº»À¸·Î x ÁÂÇ¥°¡ gap Â÷ÀÌ·Î ¾ÕorµÚ ¿¡ ÀÖ´Â »À´ëµéÀ» °Ë»öÇÏ°í ¹ß°ßÇÏÁö ¸øÇÏ¸é
-			// ÇÏ³ª¾¿ Å½»öÇÑ´Ù.
-			while (!isFind_2) { // ´ÙÀ½ ±â¿ï±â¸¦ ºñ±³ÇÒ idx µéÀ» °ñ¶ó³½´Ù.
+			// ê¸°ë³¸ìœ¼ë¡œ x ì¢Œí‘œê°€ gap ì°¨ì´ë¡œ ì•orë’¤ ì— ìˆëŠ” ë¼ˆëŒ€ë“¤ì„ ê²€ìƒ‰í•˜ê³  ë°œê²¬í•˜ì§€ ëª»í•˜ë©´
+			// í•˜ë‚˜ì”© íƒìƒ‰í•œë‹¤.
+			while (!isFind_2) { // ë‹¤ìŒ ê¸°ìš¸ê¸°ë¥¼ ë¹„êµí•  idx ë“¤ì„ ê³¨ë¼ë‚¸ë‹¤.
 				int searchCnt = 1;
 				while (searchCnt < gap + 8) {
 
 					preSearchIdx = idx1 + (idxDirection * searchCnt);
 					if (preSearchIdx >= skeleton.size()) {
-						System.out.println("ÁÂÇ¥°¡ ³¡³²À¸·Î ÀÎÇÑ Å½»ö ¿Ï·á");
+						System.out.println("ì¢Œí‘œê°€ ëë‚¨ìœ¼ë¡œ ì¸í•œ íƒìƒ‰ ì™„ë£Œ");
 						System.out.println(idx + "to" + (skeleton.size() - 1));
 						removeSkel(idx, skeleton.size() - 1);
 						return;
 
 					}
 					if (getDistance(skeleton.get(preSearchIdx), skeleton.get(searchIdx)) > 50) {
-						System.out.println("ÁÂÇ¥°¡ Æ¦À¸·Î ÀÎÇÑ Å½»ö ¿Ï·á");
+						System.out.println("ì¢Œí‘œê°€ íŠìœ¼ë¡œ ì¸í•œ íƒìƒ‰ ì™„ë£Œ");
 						System.out.println(idx + "to" + preSearchIdx);
 						removeSkel(idx, preSearchIdx);
 						return;
 					} else if ((skeleton.get(preSearchIdx).getX() - skeleton.get(searchIdx).getX()) * xDirection < 0) {
-						System.out.println("case2,4 ¿¡ ÀÇÇÑ Å½»ö ¿Ï·á");
+						System.out.println("case2,4 ì— ì˜í•œ íƒìƒ‰ ì™„ë£Œ");
 						System.out.println(idx + "to" + preSearchIdx);
 						removeSkel(idx, preSearchIdx);
 						return;
@@ -754,30 +754,30 @@ public class LetterPairing {
 					}
 
 					else {
-						System.out.println("ÀÎµ¦½º¿¡·¯");
+						System.out.println("ì¸ë±ìŠ¤ì—ëŸ¬");
 					}
 					//
 				}
-				if (indexList2.size() > 0) // Ã£Àº°æ¿ì
+				if (indexList2.size() > 0) // ì°¾ì€ê²½ìš°
 					isFind_2 = true;
-				else { // ¸øÃ£Àº°æ¿ì
+				else { // ëª»ì°¾ì€ê²½ìš°
 
-					x2 += xDirection; // x°ªÀÌ Áõ°¡ÇÒ¼öµµ ÀÖ°í °¨¼ÒÇÒ ¼öµµ ÀÖ´Ù. ±×·¡¼­ ¹«Á¶°Ç ´õÇÏ¸é ¾ÈµÇ°í
-										// ±â¿ï±â¸¦ º¸°í ÆÇ´ÜÇØ¾ßÇÑ´Ù.
+					x2 += xDirection; // xê°’ì´ ì¦ê°€í• ìˆ˜ë„ ìˆê³  ê°ì†Œí•  ìˆ˜ë„ ìˆë‹¤. ê·¸ë˜ì„œ ë¬´ì¡°ê±´ ë”í•˜ë©´ ì•ˆë˜ê³ 
+					// ê¸°ìš¸ê¸°ë¥¼ ë³´ê³  íŒë‹¨í•´ì•¼í•œë‹¤.
 					faultCnt++;
-					if (faultCnt > gap) { // x°ªÀ» Á¶Á¤ÇØ¼­ ¸øÃ£´Â °æ¿ì¿¡´Â idx°ªÀ» Á¶Á¤ÇØ¼­ Ã£´Â°ÍÀ»
-											// ½ÃµµÇÑ´Ù ¼öÁ¤ÇÊ¿ä
+					if (faultCnt > gap) { // xê°’ì„ ì¡°ì •í•´ì„œ ëª»ì°¾ëŠ” ê²½ìš°ì—ëŠ” idxê°’ì„ ì¡°ì •í•´ì„œ ì°¾ëŠ”ê²ƒì„
+						// ì‹œë„í•œë‹¤ ìˆ˜ì •í•„ìš”
 						idx1 += 1;
 						faultCnt = 0;
 					}
-					searchIdx = idx1; // Å½»ö¹üÀ§ ³¡±îÁö °¬´ø searchIdx °ªÀ» ´Ù½Ã Ã³À½À¸·Î ÃÊ±âÈ­
+					searchIdx = idx1; // íƒìƒ‰ë²”ìœ„ ëê¹Œì§€ ê°”ë˜ searchIdx ê°’ì„ ë‹¤ì‹œ ì²˜ìŒìœ¼ë¡œ ì´ˆê¸°í™”
 				}
 
 			}
 
 			sum = 0;
-			for (int i = 0; i < indexList2.size(); i++) { // ¸®½ºÆ®¿¡ µé¾î¿Â ÁÂÇ¥¿¡¼­ y°ªÀÇ
-															// Æò±ÕÀ» ³½´Ù
+			for (int i = 0; i < indexList2.size(); i++) { // ë¦¬ìŠ¤íŠ¸ì— ë“¤ì–´ì˜¨ ì¢Œí‘œì—ì„œ yê°’ì˜
+				// í‰ê· ì„ ë‚¸ë‹¤
 				sum += skeleton.get(indexList2.get(i)).getY();
 				idx1 = indexList2.get(i);
 			}
@@ -785,17 +785,17 @@ public class LetterPairing {
 			y2 = sum / (double) indexList2.size();
 
 			slope2 = (y2 - y1) / (x2 - x1);
-			if (isFirstSeek) { // Ã³À½ Å½»öÇÏ´Â °æ¿ì¿¡´Â Àü¿¡ ³ª¿Ô´ø ±â¿ï±â¿Í ºñ±³ºÒ°¡ÇÏ±â¶§¹®¿¡ ±×´ë·Î ³Ö¾îÁØ´Ù.
+			if (isFirstSeek) { // ì²˜ìŒ íƒìƒ‰í•˜ëŠ” ê²½ìš°ì—ëŠ” ì „ì— ë‚˜ì™”ë˜ ê¸°ìš¸ê¸°ì™€ ë¹„êµë¶ˆê°€í•˜ê¸°ë•Œë¬¸ì— ê·¸ëŒ€ë¡œ ë„£ì–´ì¤€ë‹¤.
 				isFirstSeek = false;
 				slope1 = slope2;
 			}
 
-			if (Math.abs(slope2 - slope1) > 0.7) { // ±â¿ï±âÀÇ Â÷ÀÌ°¡ ±Ş°İÇÏ°Ô º¯ÇÏ¸é Å½»öÀ» ³¡³½´Ù.
+			if (Math.abs(slope2 - slope1) > 0.7) { // ê¸°ìš¸ê¸°ì˜ ì°¨ì´ê°€ ê¸‰ê²©í•˜ê²Œ ë³€í•˜ë©´ íƒìƒ‰ì„ ëë‚¸ë‹¤.
 				removeSkel(idx, searchIdx);
 				return;
 			}
 
-			System.out.println("slope: " + slope1 + "ÀÎµ¦½º: " + (idx1) + " x1:" + x1 + " x2:" + x2);
+			System.out.println("slope: " + slope1 + "ì¸ë±ìŠ¤: " + (idx1) + " x1:" + x1 + " x2:" + x2);
 
 			x1 = x2;
 			y1 = y2;
@@ -805,14 +805,14 @@ public class LetterPairing {
 
 			isFind_2 = false;
 
-			for (int i = 0; i < indexList2.size(); i++) // °è»êÀÌ ³¡³µÀ¸¹Ç·Î ¸®½ºÆ®¿¡ ÀÖ´ø
-														// ÁÂÇ¥µéÀ» ´Ù Áö¿ò
+			for (int i = 0; i < indexList2.size(); i++) // ê³„ì‚°ì´ ëë‚¬ìœ¼ë¯€ë¡œ ë¦¬ìŠ¤íŠ¸ì— ìˆë˜
+			// ì¢Œí‘œë“¤ì„ ë‹¤ ì§€ì›€
 			{
-				idx1 = indexList2.get(i); // Å½»öµÈ ÁÂÇ¥Áß¿¡ °¡Àå ¸¶Áö¸·À» ÀúÀå
+				idx1 = indexList2.get(i); // íƒìƒ‰ëœ ì¢Œí‘œì¤‘ì— ê°€ì¥ ë§ˆì§€ë§‰ì„ ì €ì¥
 				indexList2.remove(i);
 
 			}
-			searchIdx = idx1; // Å½»ö¹üÀ§ ³¡±îÁö °¬´ø searchIdx °ªÀ» ´Ù½Ã Ã³À½À¸·Î ÃÊ±âÈ­
+			searchIdx = idx1; // íƒìƒ‰ë²”ìœ„ ëê¹Œì§€ ê°”ë˜ searchIdx ê°’ì„ ë‹¤ì‹œ ì²˜ìŒìœ¼ë¡œ ì´ˆê¸°í™”
 		}
 	}
 
@@ -836,15 +836,15 @@ public class LetterPairing {
 			cnt--;
 		}
 
-		System.out.println(from + " ºÎÅÍ " + to + " ±îÁö »èÁ¦µÊ");
+		System.out.println(from + " ë¶€í„° " + to + " ê¹Œì§€ ì‚­ì œë¨");
 		// skeletonTest(100);
 
 		return;
 
 	}
 
-	JLabel printButtonImg(Coordinate c1, String color) { // ¹öÆ° ÀÌ¹ÌÁö¸¦ Âï°í ÇØ´ç ÀÌ¹ÌÁö
-															// ·¹ÀÌºíÀ» ¹İÈ¯ÇÑ´Ù.
+	JLabel printButtonImg(Coordinate c1, String color) { // ë²„íŠ¼ ì´ë¯¸ì§€ë¥¼ ì°ê³  í•´ë‹¹ ì´ë¯¸ì§€
+		// ë ˆì´ë¸”ì„ ë°˜í™˜í•œë‹¤.
 
 		int x = c1.getX();
 		int y = c1.getY();
@@ -865,8 +865,8 @@ public class LetterPairing {
 		return buttonLabel;
 	}
 
-	JLabel[] printButtonImg(Coordinate c1, Coordinate c2) { // ÀÌ¹ÌÁö¸¦ Âï°í ÇØ´ç ÀÌ¹ÌÁö
-															// ·¹ÀÌºí ¹è¿­À» ¹İÈ¯ÇÑ´Ù.
+	JLabel[] printButtonImg(Coordinate c1, Coordinate c2) { // ì´ë¯¸ì§€ë¥¼ ì°ê³  í•´ë‹¹ ì´ë¯¸ì§€
+		// ë ˆì´ë¸” ë°°ì—´ì„ ë°˜í™˜í•œë‹¤.
 
 		// int x1 = c1.getX();
 		// int y1 = c1.getY();
@@ -904,7 +904,7 @@ public class LetterPairing {
 			pairList.get(i).printPairList();
 		}
 	}
-/*	// ¶óº§ Ãß°¡ 
+/*	// ë¼ë²¨ ì¶”ê°€
 	public void create_form(Component cmpt, int x, int y, int w, int h){
 	  GridBagConstraints gbc = new GridBagConstraints();
 	  gbc.fill = GridBagConstraints.BOTH;
@@ -919,41 +919,41 @@ public class LetterPairing {
 	*/
 	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+
 		ArrayList<LetterPairing> lpList = new ArrayList<LetterPairing>();
-		JFrame frame ; // Ã¢
+		JFrame frame ; // ì°½
 		JPanel p ;
 		JScrollPane scroll;
-		JButton completeButton = new JButton("Àû¿ë ¿Ï·á");
+		JButton completeButton = new JButton("ì ìš© ì™„ë£Œ");
 		completeButton.setLocation(100, 200);
-		frame = new JFrame("LetterPairing"); // Ã¢
-		
+		frame = new JFrame("LetterPairing"); // ì°½
+
 		UfoIO curUfo;
-		
-		p = new JPanel() { // È­¸é¿¡ »À´ë ÁÂÇ¥µéÀÌ ÂïÈ÷°Ô ¸¸µê
+
+		p = new JPanel() { // í™”ë©´ì— ë¼ˆëŒ€ ì¢Œí‘œë“¤ì´ ì°íˆê²Œ ë§Œë“¦
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g.setColor(Color.BLACK);
-				//g.drawPolygon(poly); // ±ÛÀÚÀÇ ¿Ü°¢¼± Ç¥½Ã 
+				//g.drawPolygon(poly); // ê¸€ìì˜ ì™¸ê°ì„  í‘œì‹œ
 				for(LetterPairing lp:lpList){
-					g.drawPolygon(lp.poly); //lplist¿¡ ÀÖ´Â µµÇüÀ» ÀüºÎ ±×¸² 
+					g.drawPolygon(lp.poly); //lplistì— ìˆëŠ” ë„í˜•ì„ ì „ë¶€ ê·¸ë¦¼
 				}
 
-				
+
 				int max = 0;
-				for (int i = 0; i < 1000; i++) { // ³»ºÎ Á¡À¸·Î ÂïÀ½
-					if (i == 0 || i == 999) // ¸ğ¼­¸® ½ºÅµ
+				for (int i = 0; i < 1000; i++) { // ë‚´ë¶€ ì ìœ¼ë¡œ ì°ìŒ
+					if (i == 0 || i == 999) // ëª¨ì„œë¦¬ ìŠ¤í‚µ
 						continue;
 					for (int j = 0; j < 1000; j++) {
-						if (j == 0 || j == 999 || matrix[i][j] == 0) // ¸ğ¼­¸® ½ºÅµ,
-																		// 0½ºÅµ
+						if (j == 0 || j == 999 || matrix[i][j] == 0) // ëª¨ì„œë¦¬ ìŠ¤í‚µ,
+																		// 0ìŠ¤í‚µ
 							continue;
 
-						max = 0; // ÁÖº¯¿¡¼­ °¡Àå Å« °ª
-						for (int k = i - 1; k <= i + 1; k++) { // ÁÖº¯¿¡¼­ °¡Àå Å« °ª Ã£À½
+						max = 0; // ì£¼ë³€ì—ì„œ ê°€ì¥ í° ê°’
+						for (int k = i - 1; k <= i + 1; k++) { // ì£¼ë³€ì—ì„œ ê°€ì¥ í° ê°’ ì°¾ìŒ
 
-							for (int l = j - 1; l <= j + 1; l++) { // max°ªÀ» Ã£À½
+							for (int l = j - 1; l <= j + 1; l++) { // maxê°’ì„ ì°¾ìŒ
 								if (k == i && j == l)
 									continue;
 								if (matrix[k][l] > max)
@@ -961,29 +961,29 @@ public class LetterPairing {
 							}
 						}
 
-						if (matrix[i][j] >= max) // »À´ë°¡ ¸ÂÀ¸¸é ±×¸°´Ù. ¼öÁ¤ÇÊ
+						if (matrix[i][j] >= max) // ë¼ˆëŒ€ê°€ ë§ìœ¼ë©´ ê·¸ë¦°ë‹¤. ìˆ˜ì •í•„
 							g.drawLine(i, j, i, j);
 					}
 				}
-				
-				
-				
+
+
+
 				for(LetterPairing lp : lpList){
 					ArrayList<Pair> pairList = lp.getPairList();
-					//left´Â left³¢¸®  right´Â right ³¢¸® ¼±À¸·Î ÀÕ´Â´Ù
-					// ´ÙÀ½ Æä¾î¿Í ÀÌ¾îÁÖ´Â ±¸Á¶
+					//leftëŠ” leftë¼ë¦¬  rightëŠ” right ë¼ë¦¬ ì„ ìœ¼ë¡œ ì‡ëŠ”ë‹¤
+					// ë‹¤ìŒ í˜ì–´ì™€ ì´ì–´ì£¼ëŠ” êµ¬ì¡°
 					for(int j=0;j<pairList.size()-1; j++){
 						Pair p1 = pairList.get(j);
 						Pair p2 = pairList.get(j+1);
 						g.setColor(Color.GREEN);
 						g.drawLine(p1.getLeft().getX(), p1.getLeft().getY(),
 								p2.getLeft().getX(), p2.getLeft().getY());
-						
+
 						g.setColor(Color.ORANGE);
 						g.drawLine(p1.getRight().getX(), p1.getRight().getY(),
 								p2.getRight().getX(), p2.getRight().getY());
 					}
-					
+
 					for(int j = 0; j<pairList.size(); j++){
 						Pair p = pairList.get(j);
 						g.setColor(Color.GREEN);
@@ -999,43 +999,43 @@ public class LetterPairing {
 			}
 
 		};
-		p.add(completeButton); // ÆĞ³Î¿¡ ¿Ï·á ¹öÆ° Ãß°¡
-		
+		p.add(completeButton); // íŒ¨ë„ì— ì™„ë£Œ ë²„íŠ¼ ì¶”ê°€
+
 		p.setLayout(null);
-		
+
 		completeButton.setBounds(400, 900, 100, 50);
-				
+
 		frame = new JFrame("LetterPairing");
 		frame.setSize(1200, 1000);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.setContentPane(p);
-		//p.addKeyListener(new PairingKeyAdapter()); // Å°º¸µå ¸®½º³Ê Ãß°¡
+		//p.addKeyListener(new PairingKeyAdapter()); // í‚¤ë³´ë“œ ë¦¬ìŠ¤ë„ˆ ì¶”ê°€
 		//frame.pack();
-		
+
 		frame.addKeyListener(new PairingKeyAdapter());
 		JLabel label = new JLabel("0");
 
-		//ÆĞ³Î¿¡ ½ºÅ©·ÑÀ» Ãß°¡ÇÑ´Ù
-		scroll = new JScrollPane(p , ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, 
+		//íŒ¨ë„ì— ìŠ¤í¬ë¡¤ì„ ì¶”ê°€í•œë‹¤
+		scroll = new JScrollPane(p , ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scroll.setBounds(0,0,1180,980);    // ÇÁ·¹ÀÓ¿¡ ½ºÅ©·ÑÆĞ³ÎÀÇ À§Ä¡¸¦ Á¤ÇÑ´Ù
+		scroll.setBounds(0,0,1180,980);    // í”„ë ˆì„ì— ìŠ¤í¬ë¡¤íŒ¨ë„ì˜ ìœ„ì¹˜ë¥¼ ì •í•œë‹¤
 		p.setBackground(Color.WHITE);
 
-		//Æú´õ¿¡ ÀÖ´Â glif ¸®½ºÆ®¸¦ °¡Á®¿È
+		//í´ë”ì— ìˆëŠ” glif ë¦¬ìŠ¤íŠ¸ë¥¼ ê°€ì ¸ì˜´
 		String glifFolderPath = "glif";
 		File glifFolder = new File(glifFolderPath);
 		File []fileList = glifFolder.listFiles();
 		ArrayList<UfoIO> ufoList = new ArrayList<UfoIO>();
-		
+
 		for(File file: fileList){
 			ufoList.add(new UfoIO(file));
 			System.out.println(file.getName());
 		}
 		int fileIdx = 0;
-		
-		
-		//¾×¼Ç¸®½º³Ê¿¡ µé¾î°¡¾ßÇÒ ÄÚµåµé~
+
+
+		//ì•¡ì…˜ë¦¬ìŠ¤ë„ˆì— ë“¤ì–´ê°€ì•¼í•  ì½”ë“œë“¤~
 		completeButton.addActionListener(new ActionListener(){
 
 			@Override
@@ -1044,17 +1044,17 @@ public class LetterPairing {
 				curUfo = ufoList.get(++fileIdx);
 			}
 		});
-		
-		
+
+
 		curUfo = ufoList.get(fileIdx);
-		//ÆÄ½ÌµÈ µ¥ÀÌÅÍ·Î Æä¾î¸µ 
+		//íŒŒì‹±ëœ ë°ì´í„°ë¡œ í˜ì–´ë§
 		ArrayList<Letter> letterList = curUfo.getLetterList();
-		
-		// ¿©·¯ µµÇüÀ» Ç¥ÇöÇÏ±â À§ÇØ¼­ list¿¡ Ãß°¡!
-		for(Letter letter: letterList){ 
-			lpList.add(new LetterPairing(letter, frame, p));    
+
+		// ì—¬ëŸ¬ ë„í˜•ì„ í‘œí˜„í•˜ê¸° ìœ„í•´ì„œ listì— ì¶”ê°€!
+		for(Letter letter: letterList){
+			lpList.add(new LetterPairing(letter, frame, p));
 		}
-			
+
 
 		//lp.findGarbageSkel();
 
@@ -1062,11 +1062,11 @@ public class LetterPairing {
 		for(LetterPairing lp: lpList){
 			lp.printPairList();
 		}
-		
+
 		ArrayList<Pair> pairSumList = new ArrayList<Pair>();
-		
-		//lpList¿¡ ÀÖ´Â pairµéÀ» ÇÏ³ª·Î ÇÕÄ§
-		// ÆÄÀÏ·Î Ãâ·ÂÇÏ±â Àü¿¡ ¸¶Áö¸· ´Ü°è¿¡¼­ ½ÇÇàÇØ¾ßÇÔ
+
+		//lpListì— ìˆëŠ” pairë“¤ì„ í•˜ë‚˜ë¡œ í•©ì¹¨
+		// íŒŒì¼ë¡œ ì¶œë ¥í•˜ê¸° ì „ì— ë§ˆì§€ë§‰ ë‹¨ê³„ì—ì„œ ì‹¤í–‰í•´ì•¼í•¨
 		for(LetterPairing lp: lpList){
 			pairSumList.addAll(lp.getPairList());
 		}

@@ -9,53 +9,53 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class PairingGui extends JFrame {
-	
-	//È­¸é ¿ä¼Òµé
+
+	//í™”ë©´ ìš”ì†Œë“¤
 	JFrame frame;
 	JPanel p;
 	JScrollPane scroll;
 	JButton completeButton;
 	PairingKeyAdapter pairingKeyAdapter;
-	
-	//µ¥ÀÌÅÍ ¿ä¼Òµé
+
+	//ë°ì´í„° ìš”ì†Œë“¤
 	UfoIO curUfo;
 	ArrayList<LetterPairing> lpList;
 	int fileIdx;
 	ArrayList<UfoIO> ufoList ;
 	ArrayList<Letter> letterList;
 	ArrayList<Pair> pairSumList;
-	
+
 	public PairingGui(){
 		fileIdx = 0;
 		lpList = new ArrayList<LetterPairing>();
 		pairingKeyAdapter = new PairingKeyAdapter();
-		completeButton = new JButton("Àû¿ë ¿Ï·á");
+		completeButton = new JButton("ì ìš© ì™„ë£Œ");
 		completeButton.setLocation(100, 200);
 		frame = this;
-		p = new JPanel() { // È­¸é¿¡ »À´ë ÁÂÇ¥µéÀÌ ÂïÈ÷°Ô ¸¸µê
+		p = new JPanel() { // í™”ë©´ì— ë¼ˆëŒ€ ì¢Œí‘œë“¤ì´ ì°íˆê²Œ ë§Œë“¦
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g.setColor(Color.BLACK);
-				//g.drawPolygon(poly); // ±ÛÀÚÀÇ ¿Ü°¢¼± Ç¥½Ã 
+				//g.drawPolygon(poly); // ê¸€ìì˜ ì™¸ê°ì„  í‘œì‹œ
 				for(LetterPairing lp:lpList){
-					g.drawPolygon(lp.poly); //lplist¿¡ ÀÖ´Â µµÇüÀ» ÀüºÎ ±×¸² 
+					g.drawPolygon(lp.poly); //lplistì— ìˆëŠ” ë„í˜•ì„ ì „ë¶€ ê·¸ë¦¼
 				}
 
-				
+
 				/*int max = 0;
-				for (int i = 0; i < 1000; i++) { // ³»ºÎ Á¡À¸·Î ÂïÀ½
-					if (i == 0 || i == 999) // ¸ğ¼­¸® ½ºÅµ
+				for (int i = 0; i < 1000; i++) { // ë‚´ë¶€ ì ìœ¼ë¡œ ì°ìŒ
+					if (i == 0 || i == 999) // ëª¨ì„œë¦¬ ìŠ¤í‚µ
 						continue;
 					for (int j = 0; j < 1000; j++) {
-						if (j == 0 || j == 999 || matrix[i][j] == 0) // ¸ğ¼­¸® ½ºÅµ,
-																		// 0½ºÅµ
+						if (j == 0 || j == 999 || matrix[i][j] == 0) // ëª¨ì„œë¦¬ ìŠ¤í‚µ,
+																		// 0ìŠ¤í‚µ
 							continue;
 
-						max = 0; // ÁÖº¯¿¡¼­ °¡Àå Å« °ª
-						for (int k = i - 1; k <= i + 1; k++) { // ÁÖº¯¿¡¼­ °¡Àå Å« °ª Ã£À½
+						max = 0; // ì£¼ë³€ì—ì„œ ê°€ì¥ í° ê°’
+						for (int k = i - 1; k <= i + 1; k++) { // ì£¼ë³€ì—ì„œ ê°€ì¥ í° ê°’ ì°¾ìŒ
 
-							for (int l = j - 1; l <= j + 1; l++) { // max°ªÀ» Ã£À½
+							for (int l = j - 1; l <= j + 1; l++) { // maxê°’ì„ ì°¾ìŒ
 								if (k == i && j == l)
 									continue;
 								if (matrix[k][l] > max)
@@ -63,38 +63,38 @@ public class PairingGui extends JFrame {
 							}
 						}
 
-						if (matrix[i][j] >= max) // »À´ë°¡ ¸ÂÀ¸¸é ±×¸°´Ù. ¼öÁ¤ÇÊ
+						if (matrix[i][j] >= max) // ë¼ˆëŒ€ê°€ ë§ìœ¼ë©´ ê·¸ë¦°ë‹¤. ìˆ˜ì •í•„
 							g.drawLine(i, j, i, j);
 					}
 				}*/
-				
-				
-				
+
+
+
 				for(LetterPairing lp : lpList){
 					ArrayList<Pair> pairList = lp.getPairList();
-					//left´Â left³¢¸®  right´Â right ³¢¸® ¼±À¸·Î ÀÕ´Â´Ù
-					// ´ÙÀ½ Æä¾î¿Í ÀÌ¾îÁÖ´Â ±¸Á¶
+					//leftëŠ” leftë¼ë¦¬  rightëŠ” right ë¼ë¦¬ ì„ ìœ¼ë¡œ ì‡ëŠ”ë‹¤
+					// ë‹¤ìŒ í˜ì–´ì™€ ì´ì–´ì£¼ëŠ” êµ¬ì¡°
 					/*for(int j=0;j<pairList.size()-1; j++){
 						Pair p1 = pairList.get(j);
 						Pair p2 = pairList.get(j+1);
 						g.setColor(Color.GREEN);
 						g.drawLine(p1.getLeft().getX(), p1.getLeft().getY(),
 								p2.getLeft().getX(), p2.getLeft().getY());
-						
+
 						g.setColor(Color.ORANGE);
 						g.drawLine(p1.getRight().getX(), p1.getRight().getY(),
 								p2.getRight().getX(), p2.getRight().getY());
 					}*/
-					
-					//Â¦³¢¸® ÆÄ¶õ»öÀ¸·Î ÀÌ¾îÁØ´Ù.
+
+					//ì§ë¼ë¦¬ íŒŒë€ìƒ‰ìœ¼ë¡œ ì´ì–´ì¤€ë‹¤.
 					for(int j = 0; j<pairList.size(); j++){
 						Pair p = pairList.get(j);
 						g.setColor(Color.GREEN);
 						g.drawLine(p.getLeft().getX(), p.getLeft().getY(),
 								p.getRight().getX(), p.getRight().getY());
 					}
-					
-					
+
+
 				}
 			}
 
@@ -104,143 +104,146 @@ public class PairingGui extends JFrame {
 			}
 
 		};
-		p.add(completeButton); // ÆĞ³Î¿¡ ¿Ï·á ¹öÆ° Ãß°¡
-		//´Ù ¼öµ¿À¸·Î Á¶ÀıÇÏ±â À§ÇØ
+		p.add(completeButton); // íŒ¨ë„ì— ì™„ë£Œ ë²„íŠ¼ ì¶”ê°€
+		//ë‹¤ ìˆ˜ë™ìœ¼ë¡œ ì¡°ì ˆí•˜ê¸° ìœ„í•´
 		p.setLayout(null);
-	
+
 		completeButton.setBounds(400, 900, 100, 50);
 		this.setSize(1200, 1000);
 		this.setVisible(true);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addKeyListener(pairingKeyAdapter);
-		
-			
-		JLabel label = new JLabel("0");
-		
-		scroll = new JScrollPane(p , ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, 
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scroll.setBounds(0,0,1180,980);    // ÇÁ·¹ÀÓ¿¡ ½ºÅ©·ÑÆĞ³ÎÀÇ À§Ä¡¸¦ Á¤ÇÑ´Ù
-		p.setBackground(Color.WHITE);
-		
-		
-		//Æú´õ¿¡ ÀÖ´Â glif ¸®½ºÆ®¸¦ °¡Á®¿È
-		// 7/28 ÁØÀº Ãß°¡ ... Æú´õ ¼±ÅÃ ´ÙÀÌ¾ó·Î±× ¶ç¿ö¼­ ¼±ÅÃ ...	
-		// 7/31 ÁØÀº ¼öÁ¤... ´ÜÀÏÆÄÀÏ È¤Àº Æú´õ¸¦ ¼±ÅÃÇØ¼­ Æä¾î¸µ...
-		
-		// 8/1 ÁØÀº Ãß°¡ ... ÆÄÀÏ È¤Àº Æú´õ¸¦ ¼±ÅÃÇÏ¶ó´Â ´ÙÀÌ¾ó·Î±×
-		//JOptionPane.showMessageDialog(p,"glif ÆÄÀÏÀÌ³ª Æú´õ¸¦ ¼±ÅÃ ÇÏ¼¼¿ä.");
 
-		
+
+		JLabel label = new JLabel("0");
+
+		scroll = new JScrollPane(p , ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroll.setBounds(0,0,1180,980);    // í”„ë ˆì„ì— ìŠ¤í¬ë¡¤íŒ¨ë„ì˜ ìœ„ì¹˜ë¥¼ ì •í•œë‹¤
+		p.setBackground(Color.WHITE);
+
+
+		//í´ë”ì— ìˆëŠ” glif ë¦¬ìŠ¤íŠ¸ë¥¼ ê°€ì ¸ì˜´
+		// 7/28 ì¤€ì€ ì¶”ê°€ ... í´ë” ì„ íƒ ë‹¤ì´ì–¼ë¡œê·¸ ë„ì›Œì„œ ì„ íƒ ...
+		// 7/31 ì¤€ì€ ìˆ˜ì •... ë‹¨ì¼íŒŒì¼ í˜¹ì€ í´ë”ë¥¼ ì„ íƒí•´ì„œ í˜ì–´ë§...
+
+		// 8/1 ì¤€ì€ ì¶”ê°€ ... íŒŒì¼ í˜¹ì€ í´ë”ë¥¼ ì„ íƒí•˜ë¼ëŠ” ë‹¤ì´ì–¼ë¡œê·¸
+		//JOptionPane.showMessageDialog(p,"glif íŒŒì¼ì´ë‚˜ í´ë”ë¥¼ ì„ íƒ í•˜ì„¸ìš”.");
+
+
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(true);
 
 		int ret = chooser.showOpenDialog(null);
-		
-		String glifFolderPath = chooser.getSelectedFile().getPath() + "/glyphs";
-		
-		
-		
+
+
+//		String glifFolderPath = chooser.getSelectedFile().getPath() + "/glyphs";
+		String glifFolderPath = chooser.getSelectedFile().getPath() ;
+
+
+
+
 		File glifFolderAndFile = new File(glifFolderPath);
 
 		System.out.println(glifFolderPath);
-	
-		// 7/31 ÁØÀº : ÆÄÀÏÀ» ¼±ÅÃÇÑ °æ¿ì¿Í Æú´õ¸¦ ¼±ÅÃÇÑ °æ¿ì¸¦ ´Ù¸£°Ô Ã³¸®.
-		// Æú´õ´Â ÇÑ²¨¹ø¿¡ ÀüºÎ ÅÍ¸®. ÆÄÀÏÀº ¸ÖÆ¼ÆÄÀÏ Ã³¸® °¡´É
-		if(glifFolderAndFile.isFile()) {	
-			
+
+		// 7/31 ì¤€ì€ : íŒŒì¼ì„ ì„ íƒí•œ ê²½ìš°ì™€ í´ë”ë¥¼ ì„ íƒí•œ ê²½ìš°ë¥¼ ë‹¤ë¥´ê²Œ ì²˜ë¦¬.
+		// í´ë”ëŠ” í•œêº¼ë²ˆì— ì „ë¶€ í„°ë¦¬. íŒŒì¼ì€ ë©€í‹°íŒŒì¼ ì²˜ë¦¬ ê°€ëŠ¥
+		if(glifFolderAndFile.isFile()) {
+
 			File []fileList = chooser.getSelectedFiles();
-					
+
 			ufoList = new ArrayList<UfoIO>();
-			
+
 			for(File file: fileList){
 				ufoList.add(new UfoIO(file));
 			}
-			
+
 		}
 		else if(glifFolderAndFile.isDirectory()) {
 			File []fileList = glifFolderAndFile.listFiles();
-			
+
 			ufoList = new ArrayList<UfoIO>();
-			//Æú´õ¿¡ ÀÖ´Â ÆÄÀÏµéÀ» ufoList¿¡ ´õÇØÁØ´Ù.
+			//í´ë”ì— ìˆëŠ” íŒŒì¼ë“¤ì„ ufoListì— ë”í•´ì¤€ë‹¤.
 			for(File file: fileList){
 				ufoList.add(new UfoIO(file));
 			}
 		}
-		
-		System.out.println("ÆÄÀÏ ¼±ÅÃ ¿Ï·á");
-		
+
+		System.out.println("íŒŒì¼ ì„ íƒ ì™„ë£Œ");
+
 
 		fileIdx = 0;
 		completeButton.addActionListener(new ActionListener(){
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//meTaUfo ÀÛ¼º
-				
+				//meTaUfo ì‘ì„±
 
-				// 7/31 ÁØÀº : ÆÄÀÏÀ» ¸ğµÎ ÀĞÀ¸¸é ÇÁ·Î±×·¥ Á¾·á
+
+				// 7/31 ì¤€ì€ : íŒŒì¼ì„ ëª¨ë‘ ì½ìœ¼ë©´ í”„ë¡œê·¸ë¨ ì¢…ë£Œ
 				if(ufoList.size() < (fileIdx + 1)) {
-					
-					//´ÙÀÌ¾ó·Î±×¸¦ ¶ç¿î ÈÄ ÇÁ·Î±×·¥ Á¾·á
-					JOptionPane.showMessageDialog(p,"Æä¾î¸µÀ» ¿Ï·áÇß½À´Ï´Ù. Á¾·áÇÕ´Ï´Ù.");
+
+					//ë‹¤ì´ì–¼ë¡œê·¸ë¥¼ ë„ìš´ í›„ í”„ë¡œê·¸ë¨ ì¢…ë£Œ
+					JOptionPane.showMessageDialog(p,"í˜ì–´ë§ì„ ì™„ë£Œí–ˆìŠµë‹ˆë‹¤. ì¢…ë£Œí•©ë‹ˆë‹¤.");
 					System.exit(0);
 				}
-				
-				// 8/1 ÁØÀº : ÇöÀç ÆÄÀÏÀ» ÀúÀåÇÔ ¾Õ¿¡¼­ fileIdx++À» ¸ÕÀú ÇØÁáÀ¸¹Ç·Î ÇöÀç ÀÎµ¦½º ÀüÀÇ °ÍÀ¸·Î ÀúÀåÇØ¾ß ÇÑ´Ù.
+
+				// 8/1 ì¤€ì€ : í˜„ì¬ íŒŒì¼ì„ ì €ì¥í•¨ ì•ì—ì„œ fileIdx++ì„ ë¨¼ì € í•´ì¤¬ìœ¼ë¯€ë¡œ í˜„ì¬ ì¸ë±ìŠ¤ ì „ì˜ ê²ƒìœ¼ë¡œ ì €ì¥í•´ì•¼ í•œë‹¤.
 				curUfo.writeMetaUfo(pairSumList,ufoList.get(fileIdx-1).getUfoFile());
-				
+
 				curUfo = ufoList.get(fileIdx++);
-				
-				//¸®½ºÆ®¿¡ ÀÖ´Â ±ÛÀÚ¸¦ Áö¿ì°í ´Ù½Ã ¼ÂÆÃ
+
+				//ë¦¬ìŠ¤íŠ¸ì— ìˆëŠ” ê¸€ìë¥¼ ì§€ìš°ê³  ë‹¤ì‹œ ì…‹íŒ…
 				letterList.clear();
 				letterList = curUfo.getLetterList();
-				
-				p.removeAll(); // panel ÃÊ±âÈ­  ¹öÆ°µé¸¸ Áö¿ö¾ßÇÏ´Âµ¥ ±ÍÂú¾Æ¼­ ÀÏ´Ü ÀÌ·¸°Ô Ã³¸®ÇÔ
+
+				p.removeAll(); // panel ì´ˆê¸°í™”  ë²„íŠ¼ë“¤ë§Œ ì§€ì›Œì•¼í•˜ëŠ”ë° ê·€ì°®ì•„ì„œ ì¼ë‹¨ ì´ë ‡ê²Œ ì²˜ë¦¬í•¨
 				p.add(completeButton);
-				
-				lpList.clear(); // lplist¿¡ ÀÖ´Â ³»¿ëÀ» ´Ù Áö¿î ÈÄ
-				// ¿©·¯ µµÇüÀ» Ç¥ÇöÇÏ±â À§ÇØ¼­ list¿¡ Ãß°¡!
-				for(Letter letter: letterList){ 
-					lpList.add(new LetterPairing(letter, frame, p));    
+
+				lpList.clear(); // lplistì— ìˆëŠ” ë‚´ìš©ì„ ë‹¤ ì§€ìš´ í›„
+				// ì—¬ëŸ¬ ë„í˜•ì„ í‘œí˜„í•˜ê¸° ìœ„í•´ì„œ listì— ì¶”ê°€!
+				for(Letter letter: letterList){
+					lpList.add(new LetterPairing(letter, frame, p));
 				}
-				
+
 				pairingKeyAdapter.clear();
 				for(LetterPairing lp : lpList){
 					pairingKeyAdapter.addLp(lp);
 				}
 				pairSumList.clear();
-				//lpList¿¡ ÀÖ´Â pairµéÀ» ÇÏ³ª·Î ÇÕÄ§
-				// ÆÄÀÏ·Î Ãâ·ÂÇÏ±â Àü¿¡ ¸¶Áö¸· ´Ü°è¿¡¼­ ½ÇÇàÇØ¾ßÇÔ
+				//lpListì— ìˆëŠ” pairë“¤ì„ í•˜ë‚˜ë¡œ í•©ì¹¨
+				// íŒŒì¼ë¡œ ì¶œë ¥í•˜ê¸° ì „ì— ë§ˆì§€ë§‰ ë‹¨ê³„ì—ì„œ ì‹¤í–‰í•´ì•¼í•¨
 				for(LetterPairing lp: lpList){
 					pairSumList.addAll(lp.getPairList());
 				}
-				
-				// 7/28 ÁØÀº ¼öÁ¤ ... ±ÛÀÚ º¯°æ½Ã Å°º¸µå ¾È¸Ô´ø°Å ¸Ô°ÔÇÔ ...
+
+				// 7/28 ì¤€ì€ ìˆ˜ì • ... ê¸€ì ë³€ê²½ì‹œ í‚¤ë³´ë“œ ì•ˆë¨¹ë˜ê±° ë¨¹ê²Œí•¨ ...
 				frame.requestFocus();
-				
-			    //frame.addKeyListener(pairingKeyAdapter);
+
+				//frame.addKeyListener(pairingKeyAdapter);
 				//frame.getKeyListeners();
 				System.out.println("");
-				
+
 			}
 		});
-		
+
 		curUfo = ufoList.get(fileIdx++);
 
-		//ÆÄ½ÌµÈ µ¥ÀÌÅÍ·Î Æä¾î¸µ 
+		//íŒŒì‹±ëœ ë°ì´í„°ë¡œ í˜ì–´ë§
 		letterList = curUfo.getLetterList();
-		
-		// ¿©·¯ µµÇüÀ» Ç¥ÇöÇÏ±â À§ÇØ¼­ list¿¡ Ãß°¡!
-		for(Letter letter: letterList){ 
-			lpList.add(new LetterPairing(letter, this, p));    
+
+		// ì—¬ëŸ¬ ë„í˜•ì„ í‘œí˜„í•˜ê¸° ìœ„í•´ì„œ listì— ì¶”ê°€!
+		for(Letter letter: letterList){
+			lpList.add(new LetterPairing(letter, this, p));
 		}
-		
-		//¸®½ºÆ®¿¡ ÀúÀåµÈ lpµéÀ» ¼öµ¿ ¼öÁ¤¸ğµå¸¦ À§ÇØ keyAdapter¿¡ Ãß°¡ÇØÁÜ
+
+		//ë¦¬ìŠ¤íŠ¸ì— ì €ì¥ëœ lpë“¤ì„ ìˆ˜ë™ ìˆ˜ì •ëª¨ë“œë¥¼ ìœ„í•´ keyAdapterì— ì¶”ê°€í•´ì¤Œ
 		for(LetterPairing lp : lpList){
 			pairingKeyAdapter.addLp(lp);
 		}
-			
+
 
 		//lp.findGarbageSkel();
 
@@ -248,17 +251,17 @@ public class PairingGui extends JFrame {
 		/*for(LetterPairing lp: lpList){
 			lp.printPairList();
 		}*/
-		
+
 		pairSumList = new ArrayList<Pair>();
-		
-		//lpList¿¡ ÀÖ´Â pairµéÀ» ÇÏ³ª·Î ÇÕÄ§
-		// ÆÄÀÏ·Î Ãâ·ÂÇÏ±â Àü¿¡ ¸¶Áö¸· ´Ü°è¿¡¼­ ½ÇÇàÇØ¾ßÇÔ
+
+		//lpListì— ìˆëŠ” pairë“¤ì„ í•˜ë‚˜ë¡œ í•©ì¹¨
+		// íŒŒì¼ë¡œ ì¶œë ¥í•˜ê¸° ì „ì— ë§ˆì§€ë§‰ ë‹¨ê³„ì—ì„œ ì‹¤í–‰í•´ì•¼í•¨
 		for(LetterPairing lp: lpList){
 			pairSumList.addAll(lp.getPairList());
 		}
-		
+
 		//curUfo.writeMetaUfo(pairSumList);
 		this.setContentPane(scroll);
-		
+
 	}
 }

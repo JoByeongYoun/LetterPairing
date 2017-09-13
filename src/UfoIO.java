@@ -2,102 +2,102 @@ import java.io.*;
 import java.util.*;
 
 import javax.swing.plaf.metal.MetalIconFactory.FolderIcon16;
-public class UfoIO {   //UFOÆÄÀÏ¿¡¼­ µ¥ÀÌÅÍ¸¦ ÃßÃâÇÏ´Â Å¬·¡½º
+public class UfoIO {   //UFOíŒŒì¼ì—ì„œ ë°ì´í„°ë¥¼ ì¶”ì¶œí•˜ëŠ” í´ë˜ìŠ¤
 	private File ufoFile;
 	private Letter letter;  //
 	private ArrayList<Letter> letterList;
 	private StringTokenizer tokenizer;
-	
+
 	private ArrayList<Integer> xList;
 	private ArrayList<Integer> yList;
-	// ÆÄ½ÌµÈ ¶óÀÎ ³Ñ¹ö ÀúÀå, ¶óÀÎ ³Ñ¹ö°¡ ¿À¸§Â÷¼øÀ¸·Î ÀúÀåµÈ´Ù.
-	private ArrayList<Integer> lineNumList;  
-	
-	
+	// íŒŒì‹±ëœ ë¼ì¸ ë„˜ë²„ ì €ì¥, ë¼ì¸ ë„˜ë²„ê°€ ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ì €ì¥ëœë‹¤.
+	private ArrayList<Integer> lineNumList;
+
+
 	private String fileName;
 	private String metaUfoStr ;
-		
+
 	public UfoIO(File ufoFile){
 		this.ufoFile = ufoFile;
 		this.fileName = ufoFile.getName();
 		letterList = new ArrayList<Letter>();
-		/*xList = new ArrayList<Integer>();  // ÆÄ½ÌµÈ xÁÂÇ¥ ÀúÀå
-		yList = new ArrayList<Integer>();   // ÆÄ½ÌµÈ yÁÂÇ¥ ÀúÀå
-		*/		
-		lineNumList = new ArrayList<Integer>(); // ÆÄ½ÌµÈ ¶óÀÎ ³Ñ¹ö ÀúÀå
-		lineNumList.add(-1); // Ã³À½¿¡ -1À» ³Ö¾îÁÜ
+		/*xList = new ArrayList<Integer>();  // íŒŒì‹±ëœ xì¢Œí‘œ ì €ì¥
+		yList = new ArrayList<Integer>();   // íŒŒì‹±ëœ yì¢Œí‘œ ì €ì¥
+		*/
+		lineNumList = new ArrayList<Integer>(); // íŒŒì‹±ëœ ë¼ì¸ ë„˜ë²„ ì €ì¥
+		lineNumList.add(-1); // ì²˜ìŒì— -1ì„ ë„£ì–´ì¤Œ
 		extractData(ufoFile);
-		
+
 		//letter = new Letter(xList, yList);
 	}
 	public UfoIO(String fileName){
 		this.fileName = fileName;
 		this.ufoFile = ufoFile = new File(fileName);
-		
-		lineNumList = new ArrayList<Integer>(); // ÆÄ½ÌµÈ ¶óÀÎ ³Ñ¹ö ÀúÀå
-		lineNumList.add(-1); // Ã³À½¿¡ -1À» ³Ö¾îÁÜ
+
+		lineNumList = new ArrayList<Integer>(); // íŒŒì‹±ëœ ë¼ì¸ ë„˜ë²„ ì €ì¥
+		lineNumList.add(-1); // ì²˜ìŒì— -1ì„ ë„£ì–´ì¤Œ
 		extractData(ufoFile);
 
 	}
-	
+
 	public Letter getLetter(){
 		if(letter == null)
-			System.out.println("letter ÃÊ±âÈ­ ¿À·ù");
+			System.out.println("letter ì´ˆê¸°í™” ì˜¤ë¥˜");
 		return this.letter;
 	}
 	public ArrayList<Letter> getLetterList(){
 		if(letterList == null){
-			System.out.println("ÆÄ½ÌµÈ letter°¡ ¾øÀ½");
+			System.out.println("íŒŒì‹±ëœ letterê°€ ì—†ìŒ");
 		}
 		return letterList;
 	}
-	
+
 	private int reverseY(int num){
 		int standard = 500;
 		return 2 * standard - num;
 	}
-	//glif ÆÄÀÏ¿¡¼­ ÆùÆ®ÀÇ µ¥ÀÌÅÍ¸¦ ÆÄ½ÌÇÏ´Â ÇÔ¼öÀÓ
+	//glif íŒŒì¼ì—ì„œ í°íŠ¸ì˜ ë°ì´í„°ë¥¼ íŒŒì‹±í•˜ëŠ” í•¨ìˆ˜ì„
 	public void extractData(File ufoFile){
-		
+
 		//ufoFile = new File(fileName);
 		if(ufoFile.exists()){
 			try{
 				FileReader fileReader = new FileReader(ufoFile);
 				BufferedReader br = new BufferedReader(fileReader);
 				String line = null;
-				int i = 0;  // ÁÙ ¼ö¸¦ »÷´Ù.
-				while((line = br.readLine()) != null){ //ÆÄÀÏÀÇ ³¡±îÁö ÀĞÀ½ 
-					if(line.contains("<contour>")){ // µµÇü ÇÏ³ª ½ÃÀÛ
-						
-						xList = new ArrayList<Integer>();  // ÆÄ½ÌµÈ xÁÂÇ¥ ÀúÀå
-						yList = new ArrayList<Integer>();   // ÆÄ½ÌµÈ yÁÂÇ¥ ÀúÀå
+				int i = 0;  // ì¤„ ìˆ˜ë¥¼ ìƒŒë‹¤.
+				while((line = br.readLine()) != null){ //íŒŒì¼ì˜ ëê¹Œì§€ ì½ìŒ
+					if(line.contains("<contour>")){ // ë„í˜• í•˜ë‚˜ ì‹œì‘
+
+						xList = new ArrayList<Integer>();  // íŒŒì‹±ëœ xì¢Œí‘œ ì €ì¥
+						yList = new ArrayList<Integer>();   // íŒŒì‹±ëœ yì¢Œí‘œ ì €ì¥
 					}
-					
-					if(line.contains("</contour>")){ // µµÇü ³¡!
+
+					if(line.contains("</contour>")){ // ë„í˜• ë!
 						letter = new Letter(xList, yList);
 						letterList.add(letter);
-						//xList, yList¸¦ ÀçÈ°¿ë ÇØ¼­ ´ÙÀ½ Letter¸¦ »ı¼ºÇÒ °ÍÀÌ±â  ¶§¹®¿¡ null·Î ÃÊ±âÈ­
+						//xList, yListë¥¼ ì¬í™œìš© í•´ì„œ ë‹¤ìŒ Letterë¥¼ ìƒì„±í•  ê²ƒì´ê¸°  ë•Œë¬¸ì— nullë¡œ ì´ˆê¸°í™”
 						xList = null;
 						yList = null;
 					}
-					if (line.contains("type=\"line\"") || line.contains("type=\"qcurve\"")){ // typeÀÌ ÀÖ´Â Æ÷ÀÎÆ®¸¸ ÃßÃâ
-						
+					if (line.contains("type=\"line\"") || line.contains("type=\"curve\"")){ // typeì´ ìˆëŠ” í¬ì¸íŠ¸ë§Œ ì¶”ì¶œ
+
 						String tokenline = line.substring(line.indexOf("x=\"")+3, line.length());;
-						String intStr; // Àß·ÁÁ® ³ª¿Â ¼ıÀÚ°¡ µé¾î°¥ º¯¼öÀÓ
+						String intStr; // ì˜ë ¤ì ¸ ë‚˜ì˜¨ ìˆ«ìê°€ ë“¤ì–´ê°ˆ ë³€ìˆ˜ì„
 						tokenizer = new StringTokenizer(tokenline, "\"");
 						if(tokenizer.hasMoreTokens()){
 							intStr = tokenizer.nextToken();
 
-							int x = Integer.parseInt(intStr); //x¸¦ ÀúÀå
+							int x = Integer.parseInt(intStr); //xë¥¼ ì €ì¥
 							xList.add(x);
-							
+
 							tokenline = line.substring(line.indexOf("y=\"")+3, line.length());
 							tokenizer = new StringTokenizer(tokenline, "\"");
 							intStr = tokenizer.nextToken();
 							int y = reverseY(Integer.parseInt(intStr));
 							yList.add(y);
-							
-							lineNumList.add(i); //line ³Ñ¹ö¸¦ ÀúÀå
+
+							lineNumList.add(i); //line ë„˜ë²„ë¥¼ ì €ì¥
 						}
 						else
 							throw new Exception("StringTokenizer Problem");
@@ -112,12 +112,12 @@ public class UfoIO {   //UFOÆÄÀÏ¿¡¼­ µ¥ÀÌÅÍ¸¦ ÃßÃâÇÏ´Â Å¬·¡½º
 			}
 		}
 	}
-	
-	// 7/31 ÁØÀº Ãß°¡ : GUI¿¡¼­ ÆÄÀÏÀ» ¹Ş¾Æ¿Í¼­ ºÒ·¯¿Â ÆÄÀÏÀÌ Á¸ÀçÇÏ´Â Æú´õ¿¡ ±×´ë·Î µ¤¾î¾´´Ù.
+
+	// 7/31 ì¤€ì€ ì¶”ê°€ : GUIì—ì„œ íŒŒì¼ì„ ë°›ì•„ì™€ì„œ ë¶ˆëŸ¬ì˜¨ íŒŒì¼ì´ ì¡´ì¬í•˜ëŠ” í´ë”ì— ê·¸ëŒ€ë¡œ ë®ì–´ì“´ë‹¤.
 	public void writeMetaUfo(ArrayList<Pair> pairList, File file){
 		metaUfoStr = "";
-		xList = new ArrayList<Integer>();  // ÆÄ½ÌµÈ xÁÂÇ¥ ÀúÀå
-		yList = new ArrayList<Integer>();   // ÆÄ½ÌµÈ yÁÂÇ¥ ÀúÀå
+		xList = new ArrayList<Integer>();  // íŒŒì‹±ëœ xì¢Œí‘œ ì €ì¥
+		yList = new ArrayList<Integer>();   // íŒŒì‹±ëœ yì¢Œí‘œ ì €ì¥
 		for(Letter l: letterList){
 			for(int i=0;i<l.xArray.length;i++){
 				xList.add(l.xArray[i]);
@@ -125,22 +125,22 @@ public class UfoIO {   //UFOÆÄÀÏ¿¡¼­ µ¥ÀÌÅÍ¸¦ ÃßÃâÇÏ´Â Å¬·¡½º
 			}
 		}
 		try{
-			//lineNumList¿¡ ÀúÀåµÈ ÁÙÀ» °¡Á®¿Í¼­ pair¸¦ È®ÀÎÇÑ ÈÄ ³»¿ëÀ» Ãß°¡ÇØÁØ´Ù
+			//lineNumListì— ì €ì¥ëœ ì¤„ì„ ê°€ì ¸ì™€ì„œ pairë¥¼ í™•ì¸í•œ í›„ ë‚´ìš©ì„ ì¶”ê°€í•´ì¤€ë‹¤
 			if(ufoFile.exists()){
 				FileReader fileReader = new FileReader(ufoFile);
 				BufferedReader br = new BufferedReader(fileReader);
 				String line = null;
-				int lineNum = 0; // ÇöÀç Ã³¸®ÁßÀÎ line num
-				
+				int lineNum = 0; // í˜„ì¬ ì²˜ë¦¬ì¤‘ì¸ line num
+
 				while((line = br.readLine()) != null){
-					if(lineNumList.size() > 1){ // ÆÄ½ÌÇÑ µ¥ÀÌÅÍ°¡ ³²¾ÆÀÖÀ¸¸é Ã³¸®
-						if(lineNumList.get(1) == lineNum){ // ¼öÁ¤ÇÒ ¶óÀÎÀÏ¶§ pair Á¤º¸¸¦ Ã£¾Æ¼­ ½áÁØ´Ù.
-							
-							//ÇØ´ç ÁÙÀÇ µ¥ÀÌÅÍ°¡ Æä¾î¸µÀÌ µÇ¾ú´ÂÁö Ã£´Â´Ù.
-							for(int i=0; i < pairList.size(); i++){ 
+					if(lineNumList.size() > 1){ // íŒŒì‹±í•œ ë°ì´í„°ê°€ ë‚¨ì•„ìˆìœ¼ë©´ ì²˜ë¦¬
+						if(lineNumList.get(1) == lineNum){ // ìˆ˜ì •í•  ë¼ì¸ì¼ë•Œ pair ì •ë³´ë¥¼ ì°¾ì•„ì„œ ì¨ì¤€ë‹¤.
+
+							//í•´ë‹¹ ì¤„ì˜ ë°ì´í„°ê°€ í˜ì–´ë§ì´ ë˜ì—ˆëŠ”ì§€ ì°¾ëŠ”ë‹¤.
+							for(int i=0; i < pairList.size(); i++){
 								Coordinate left = pairList.get(i).getLeft();
-								
-	 							if(left.getX() == xList.get(0) && left.getY() == yList.get(0)){
+
+								if(left.getX() == xList.get(0) && left.getY() == yList.get(0)){
 									line = line.replace("type", "penPair=\"z"+pairList.get(i).getPairNum()+"l\" type");
 									//metaUfoStr = metaUfoStr + line + "\n";
 									xList.remove(0);
@@ -157,44 +157,44 @@ public class UfoIO {   //UFOÆÄÀÏ¿¡¼­ µ¥ÀÌÅÍ¸¦ ÃßÃâÇÏ´Â Å¬·¡½º
 									lineNumList.remove(1);
 									break;
 								}
-								
+
 								if(i == pairList.size()-1)
 								{
-									//pairList¸¦ ´Ù µ¹¾Ò´Âµ¥µµ ¾È³ª¿À¸é Æä¾î¸µ¿¡ ½ÇÆĞÇÑ Á¡ÀÌ´Ù.
+									//pairListë¥¼ ë‹¤ ëŒì•˜ëŠ”ë°ë„ ì•ˆë‚˜ì˜¤ë©´ í˜ì–´ë§ì— ì‹¤íŒ¨í•œ ì ì´ë‹¤.
 									//metaUfoStr = metaUfoStr + line + "\n";
 									lineNumList.remove(1);
 									xList.remove(0);
 									yList.remove(0);
-								}	
+								}
 							}
 						}
 					}
-				//	if(lineNumList.get(0) != lineNum){ // ¼öÁ¤ÇÒ ¶óÀÎÀÌ ¾Æ´Ò¶§´Â ±×´ë·Î Ãâ·ÂÇÑ´Ù.
-						metaUfoStr = metaUfoStr + line + "\n";
+					//	if(lineNumList.get(0) != lineNum){ // ìˆ˜ì •í•  ë¼ì¸ì´ ì•„ë‹ë•ŒëŠ” ê·¸ëŒ€ë¡œ ì¶œë ¥í•œë‹¤.
+					metaUfoStr = metaUfoStr + line + "\n";
 					//}
-					
+
 					lineNum++;
 				}
 			}
-			
+
 		}catch(Exception e){
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 
 		try{
 			String path = file.getPath();
 			BufferedWriter writer = null;
-			
-			
+
+
 			if(file.isDirectory()) {
-				path = path + "/"+ fileName;	
+				path = path + "/"+ fileName;
 			}
 			else if(file.isFile()) {
 				;
 			}
-			
-			
-			writer = new BufferedWriter(new FileWriter(path));						
+
+
+			writer = new BufferedWriter(new FileWriter(path));
 			writer.write(metaUfoStr);
 			writer.close();
 		}
@@ -202,10 +202,10 @@ public class UfoIO {   //UFOÆÄÀÏ¿¡¼­ µ¥ÀÌÅÍ¸¦ ÃßÃâÇÏ´Â Å¬·¡½º
 			e.printStackTrace();
 		}
 	}
-	
+
 	public File getUfoFile() {
 		return this.ufoFile;
 	}
-	
-	
+
+
 }

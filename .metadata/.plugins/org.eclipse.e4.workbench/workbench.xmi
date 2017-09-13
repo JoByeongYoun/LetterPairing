@@ -73,7 +73,7 @@
           <tags>persp.viewSC:org.eclipse.mylyn.tasks.ui.views.tasks</tags>
           <tags>persp.newWizSC:org.eclipse.mylyn.tasks.ui.wizards.new.repository.task</tags>
           <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5QZPREeehetM72-us9g" selectedElement="_Rgx5QpPREeehetM72-us9g" horizontal="true">
-            <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5QpPREeehetM72-us9g" containerData="2500" selectedElement="_Rgx5Q5PREeehetM72-us9g">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5QpPREeehetM72-us9g" containerData="1505" selectedElement="_Rgx5Q5PREeehetM72-us9g">
               <children xsi:type="basic:PartStack" xmi:id="_Rgx5Q5PREeehetM72-us9g" elementId="left" containerData="6000" selectedElement="_Rgx5RJPREeehetM72-us9g">
                 <tags>org.eclipse.e4.primaryNavigationStack</tags>
                 <tags>active</tags>
@@ -87,10 +87,10 @@
                 <children xsi:type="advanced:Placeholder" xmi:id="_Rgx5SpPREeehetM72-us9g" elementId="org.eclipse.egit.ui.RepositoriesView" toBeRendered="false" ref="_RgwEEJPREeehetM72-us9g"/>
               </children>
             </children>
-            <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5S5PREeehetM72-us9g" containerData="7500">
-              <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5TJPREeehetM72-us9g" containerData="7500" horizontal="true">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5S5PREeehetM72-us9g" containerData="8495" selectedElement="_Rgx5TJPREeehetM72-us9g">
+              <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5TJPREeehetM72-us9g" containerData="7500" selectedElement="_Rgx5TpPREeehetM72-us9g" horizontal="true">
                 <children xsi:type="advanced:Placeholder" xmi:id="_Rgx5TZPREeehetM72-us9g" elementId="org.eclipse.ui.editorss" containerData="7500" ref="_RgVNUJPREeehetM72-us9g"/>
-                <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5TpPREeehetM72-us9g" containerData="2500">
+                <children xsi:type="basic:PartSashContainer" xmi:id="_Rgx5TpPREeehetM72-us9g" containerData="2500" selectedElement="_Rgx5T5PREeehetM72-us9g">
                   <children xsi:type="basic:PartStack" xmi:id="_Rgx5T5PREeehetM72-us9g" elementId="org.eclipse.mylyn.tasks.ui.views.tasksMStack" containerData="5000" selectedElement="_Rgx5UJPREeehetM72-us9g">
                     <children xsi:type="advanced:Placeholder" xmi:id="_Rgx5UJPREeehetM72-us9g" elementId="org.eclipse.mylyn.tasks.ui.views.tasks" ref="_RgwrIJPREeehetM72-us9g"/>
                   </children>
@@ -293,7 +293,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_RNLAwJPREeehetM72-us9g" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_RNVY0JPREeehetM72-us9g" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" enabled="false" command="_QcQheZPREeehetM72-us9g"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_oYSgsJisEeeykaNZdBDL3Q" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_QcQheZPREeehetM72-us9g"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_RNLAwZPREeehetM72-us9g" elementId="additions" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -320,7 +320,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_RNLAxZPREeehetM72-us9g" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_RNWm8JPREeehetM72-us9g" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_QcP6N5PREeehetM72-us9g"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_oYWyIJisEeeykaNZdBDL3Q" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_QcP6N5PREeehetM72-us9g"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_RNLn0JPREeehetM72-us9g" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -2200,7 +2200,7 @@
   <addons xmi:id="_QaiC8ZPREeehetM72-us9g" elementId="MinMax Addon" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
   <addons xmi:id="_QaiC8pPREeehetM72-us9g" elementId="org.eclipse.ui.workbench.addon.0" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_QatCAJPREeehetM72-us9g" elementId="SplitterAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.splitteraddon.SplitterAddon"/>
-  <addons xmi:id="_IYS0IKimEeS11vbz3f9ezw" elementId="org.eclipse.ui.ide.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
+  <addons xmi:id="_oBGvwZisEeeykaNZdBDL3Q" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
   <addons xmi:id="_dz0JgGOlEeSMMaPQU2nlzw" elementId="org.eclipse.ui.ide.application.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide.application" contributionURI="bundleclass://org.eclipse.ui.ide.application/org.eclipse.ui.internal.ide.application.addons.ModelCleanupAddon"/>
   <categories xmi:id="_QcLBoJPREeehetM72-us9g" elementId="org.eclipse.team.ui.category.team" name="Team" description="Actions that apply when working with a Team"/>
   <categories xmi:id="_QcLBoZPREeehetM72-us9g" elementId="org.eclipse.ui.category.views" name="Views" description="Commands for opening views"/>
