@@ -28,6 +28,7 @@ public class PairingGui extends JFrame {
 	public PairingGui(){
 		fileIdx = 0;
 		lpList = new ArrayList<LetterPairing>();
+		pairSumList = new ArrayList<Pair>();
 		pairingKeyAdapter = new PairingKeyAdapter();
 		completeButton = new JButton("적용 완료");
 		completeButton.setLocation(100, 200);
@@ -137,19 +138,18 @@ public class PairingGui extends JFrame {
 
 		int ret = chooser.showOpenDialog(null);
 
-
-//		String glifFolderPath = chooser.getSelectedFile().getPath() + "/glyphs";
+		//mac version
+		//String glifFolderPath = chooser.getSelectedFile().getPath() + "/glyphs";
+		//window version
 		String glifFolderPath = chooser.getSelectedFile().getPath() ;
-
-
-
 
 		File glifFolderAndFile = new File(glifFolderPath);
 
 		System.out.println(glifFolderPath);
 
 		// 7/31 준은 : 파일을 선택한 경우와 폴더를 선택한 경우를 다르게 처리.
-		// 폴더는 한꺼번에 전부 터리. 파일은 멀티파일 처리 가능
+		// 폴더는 한꺼번에 전부 처리. 파일은 멀티파일 처리 가능
+		//파일을 선택했을 때
 		if(glifFolderAndFile.isFile()) {
 
 			File []fileList = chooser.getSelectedFiles();
@@ -161,6 +161,7 @@ public class PairingGui extends JFrame {
 			}
 
 		}
+		//폴더를 선택했을 때
 		else if(glifFolderAndFile.isDirectory()) {
 			File []fileList = glifFolderAndFile.listFiles();
 
@@ -175,12 +176,36 @@ public class PairingGui extends JFrame {
 
 
 		fileIdx = 0;
+
+		//선택된 파일들에 대해 pairing 을 진행한 후 pairing 정보를 파일에 반영한다.
+		for(UfoIO curUfo : ufoList){
+			if(letterList != null)
+				letterList.clear();
+			//파싱된 데이터로 페어링
+			letterList = curUfo.getLetterList();
+
+			// 여러 도형을 표현하기 위해서 list에 추가!
+			for(Letter letter: letterList){
+				lpList.add(new LetterPairing(letter, this, p));
+			}
+
+			pairSumList.clear();
+			//lpList에 있는 pair들을 하나로 합침
+			// 파일로 출력하기 전에 마지막 단계에서 실행해야함
+			for(LetterPairing lp: lpList){
+				pairSumList.addAll(lp.getPairList());
+			}
+
+			curUfo.writeMetaUfo(pairSumList,curUfo.getUfoFile());
+			LetterPairing.pairCount = 0; // pairing number를 파일마다 갱신해 주어야함
+		}
+
+		/*
 		completeButton.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//meTaUfo 작성
-
 
 				// 7/31 준은 : 파일을 모두 읽으면 프로그램 종료
 				if(ufoList.size() < (fileIdx + 1)) {
@@ -192,7 +217,6 @@ public class PairingGui extends JFrame {
 
 				// 8/1 준은 : 현재 파일을 저장함 앞에서 fileIdx++을 먼저 해줬으므로 현재 인덱스 전의 것으로 저장해야 한다.
 				curUfo.writeMetaUfo(pairSumList,ufoList.get(fileIdx-1).getUfoFile());
-
 				curUfo = ufoList.get(fileIdx++);
 
 				//리스트에 있는 글자를 지우고 다시 셋팅
@@ -248,9 +272,9 @@ public class PairingGui extends JFrame {
 		//lp.findGarbageSkel();
 
 		// lp.skeletonTest(100);
-		/*for(LetterPairing lp: lpList){
+		*//*for(LetterPairing lp: lpList){
 			lp.printPairList();
-		}*/
+		}*//*
 
 		pairSumList = new ArrayList<Pair>();
 
@@ -261,7 +285,7 @@ public class PairingGui extends JFrame {
 		}
 
 		//curUfo.writeMetaUfo(pairSumList);
-		this.setContentPane(scroll);
+		this.setContentPane(scroll);*/
 
 	}
 }

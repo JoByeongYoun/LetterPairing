@@ -516,12 +516,7 @@ public class LetterPairing {
 			for (int j = 0; j < polyCoordiList.size(); j++) {
 
 				distance = getDistance(skeleton.get(i), polyCoordiList.get(j)); // 뼈대
-				// 좌표와
-				// 외각선
-				// 꼭지점
-				// 사이의
-				// 거리를
-				// 구함
+				//좌표와 외각선 꼭지점 사이의 거리를 구한다.
 				if (distance < 9) {
 					// printButtonImg(skeleton.get(i));
 					System.out.println(

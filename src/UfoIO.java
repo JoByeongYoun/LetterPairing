@@ -80,7 +80,7 @@ public class UfoIO {   //UFO파일에서 데이터를 추출하는 클래스
 						xList = null;
 						yList = null;
 					}
-					if (line.contains("type=\"line\"") || line.contains("type=\"curve\"")){ // type이 있는 포인트만 추출
+					if (line.contains("type=\"line\"") || line.contains("type=\"curve\"") || line.contains("type=\"qcurve\"")){ // type이 있는 포인트만 추출
 
 						String tokenline = line.substring(line.indexOf("x=\"")+3, line.length());;
 						String intStr; // 잘려져 나온 숫자가 들어갈 변수임
