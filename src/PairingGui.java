@@ -39,11 +39,13 @@ public class PairingGui extends JFrame {
 				super.paintComponent(g);
 				g.setColor(Color.BLACK);
 				//g.drawPolygon(poly); // 글자의 외각선 표시
-				for(LetterPairing lp:lpList){
+
+
+			/*	for(LetterPairing lp:lpList){
 					g.drawPolygon(lp.poly); //lplist에 있는 도형을 전부 그림
-				}
+				}*/
 
-
+				//뼈대 그림
 				/*int max = 0;
 				for (int i = 0; i < 1000; i++) { // 내부 점으로 찍음
 					if (i == 0 || i == 999) // 모서리 스킵
@@ -71,11 +73,11 @@ public class PairingGui extends JFrame {
 
 
 
-				for(LetterPairing lp : lpList){
+				/*for(LetterPairing lp : lpList){
 					ArrayList<Pair> pairList = lp.getPairList();
 					//left는 left끼리  right는 right 끼리 선으로 잇는다
 					// 다음 페어와 이어주는 구조
-					/*for(int j=0;j<pairList.size()-1; j++){
+					for(int j=0;j<pairList.size()-1; j++){
 						Pair p1 = pairList.get(j);
 						Pair p2 = pairList.get(j+1);
 						g.setColor(Color.GREEN);
@@ -85,7 +87,7 @@ public class PairingGui extends JFrame {
 						g.setColor(Color.ORANGE);
 						g.drawLine(p1.getRight().getX(), p1.getRight().getY(),
 								p2.getRight().getX(), p2.getRight().getY());
-					}*/
+					}
 
 					//짝끼리 파란색으로 이어준다.
 					for(int j = 0; j<pairList.size(); j++){
@@ -94,9 +96,7 @@ public class PairingGui extends JFrame {
 						g.drawLine(p.getLeft().getX(), p.getLeft().getY(),
 								p.getRight().getX(), p.getRight().getY());
 					}
-
-
-				}
+				}*/
 			}
 
 			@Override
@@ -105,7 +105,7 @@ public class PairingGui extends JFrame {
 			}
 
 		};
-		p.add(completeButton); // 패널에 완료 버튼 추가
+		/*p.add(completeButton); // 패널에 완료 버튼 추가
 		//다 수동으로 조절하기 위해
 		p.setLayout(null);
 
@@ -121,8 +121,7 @@ public class PairingGui extends JFrame {
 		scroll = new JScrollPane(p , ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scroll.setBounds(0,0,1180,980);    // 프레임에 스크롤패널의 위치를 정한다
-		p.setBackground(Color.WHITE);
-
+		p.setBackground(Color.WHITE);*/
 
 		//폴더에 있는 glif 리스트를 가져옴
 		// 7/28 준은 추가 ... 폴더 선택 다이얼로그 띄워서 선택 ...
@@ -179,8 +178,12 @@ public class PairingGui extends JFrame {
 
 		//선택된 파일들에 대해 pairing 을 진행한 후 pairing 정보를 파일에 반영한다.
 		for(UfoIO curUfo : ufoList){
+			//리스트 초기화
 			if(letterList != null)
 				letterList.clear();
+			if(lpList != null)
+				lpList.clear();
+
 			//파싱된 데이터로 페어링
 			letterList = curUfo.getLetterList();
 

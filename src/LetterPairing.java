@@ -43,7 +43,6 @@ public class LetterPairing {
 		this.p = p;
 		//
 
-
 		for (int i = 0; i < letter.size(); i++) { // 외각선 좌표 초기화
 			polyCoordiList.add(new Coordinate(letter.xArray[i], letter.yArray[i]));
 		}
@@ -59,7 +58,6 @@ public class LetterPairing {
 					matrix[i][j] = 0;
 			}
 		}
-
 
 		skeletonizing(matrix); // 거리계산
 		setSkeleton();
@@ -240,10 +238,10 @@ public class LetterPairing {
 		for (int i = 0; i < polyLength; i++)
 			nearSkelArray[i] = getNearSkelIdx(i);
 
-		System.out.print("가장 가까운 뼈대 나열:");
+	/*	System.out.print("가장 가까운 뼈대 나열:");
 		for (int i = 0; i < nearSkelArray.length; i++)
 			System.out.print(nearSkelArray[i] + ", ");
-		System.out.println("");
+		System.out.println("");*/
 
 		for (int i = 0; i < nearSkelArray.length; i++) { // 뼈대의 거리를 비교해서 가장 가까운
 			// 뼈대를 가진 좌표를 찾음ㅁ
@@ -267,10 +265,10 @@ public class LetterPairing {
 			prePairArray[i] = idx;
 		}
 
-		System.out.print("예비 pair 나열:");
+		/*System.out.print("예비 pair 나열:");
 		for (int i = 0; i < prePairArray.length; i++) {
 			System.out.print(prePairArray[i] + ",");
-		}
+		}*/
 
 		// 서로 짝이 맞으면 pair 생성 후
 

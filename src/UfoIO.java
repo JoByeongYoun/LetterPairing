@@ -17,6 +17,8 @@ public class UfoIO {   //UFO파일에서 데이터를 추출하는 클래스
 	private String fileName;
 	private String metaUfoStr ;
 
+	static int cnt = 0;
+
 	public UfoIO(File ufoFile){
 		this.ufoFile = ufoFile;
 		this.fileName = ufoFile.getName();
@@ -193,10 +195,10 @@ public class UfoIO {   //UFO파일에서 데이터를 추출하는 클래스
 				;
 			}
 
-
 			writer = new BufferedWriter(new FileWriter(path));
 			writer.write(metaUfoStr);
 			writer.close();
+			System.out.println(++cnt + ": " + fileName + " pairing complete");
 		}
 		catch(Exception e){
 			e.printStackTrace();
