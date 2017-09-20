@@ -198,12 +198,73 @@ public class UfoIO {   //UFO파일에서 데이터를 추출하는 클래스
 			writer = new BufferedWriter(new FileWriter(path));
 			writer.write(metaUfoStr);
 			writer.close();
+
+			checkDirection(file); // 페어링을 모두 잡은 후에 페어링 방향을 정해줌
 			System.out.println(++cnt + ": " + fileName + " pairing complete");
+
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
 	}
+	//페어링의 방향을 결정하는 함수
+	void checkDirection(File file) {
+		/*
+		 페어링이 모두 진행된 상태에서 pairing방향을 결정한다.
+		 방법
+		 파일의 처음부터 끝까지 차례대로 읽는다
+		 처음에 읽힌 pairing 방향을 R로 지정
+		 다음에 나오는 pairing 정보부터  pairing number가 바뀌면 같은 방향
+		 연속으로 같은 pairing  number가 나오면 반대 방향으로 바꿔준다.
+		*/
+
+		int curPairingNum = 0;
+		int prevPairingNum = 0;
+		boolean direction = false; //false 면 L 아니면 R
+
+		try {
+			FileReader fileReader = new FileReader(file);
+			BufferedReader br = new BufferedReader(fileReader);
+
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file.getName()));
+			String line = null;
+			int lineNum = 0; // 현재 처리중인 line num
+			int firstP, lastP; //pairing number의 처음위치와 마지막 위치
+			StringBuilder stringBuilder;
+
+
+
+			while ((line = br.readLine()) != null) {
+				if (line.contains("penPair")) {
+					stringBuilder = new StringBuilder(line);
+					firstP = line.indexOf("penPair") + 10;
+					lastP = line.indexOf("l\"",firstP);
+					if(lastP == -1)
+						lastP = line.indexOf("r\"",firstP);
+					curPairingNum = Integer.parseInt(line.substring(firstP,lastP));
+
+					if(curPairingNum == prevPairingNum)  // 이전 번호과 같은 경우 방향을 바꾼다.
+						direction = !direction;
+
+					if(direction)
+						stringBuilder.setCharAt(lastP,'r');
+					else
+						stringBuilder.setCharAt(lastP,'l');
+
+					prevPairingNum = curPairingNum;
+					line = stringBuilder.toString();
+
+				}
+				writer.write(line);
+				lineNum++;
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	public File getUfoFile() {
 		return this.ufoFile;
