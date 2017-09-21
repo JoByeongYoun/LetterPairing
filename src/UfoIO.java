@@ -62,6 +62,9 @@ public class UfoIO {   //UFO파일에서 데이터를 추출하는 클래스
 	public void extractData(File ufoFile){
 
 		//ufoFile = new File(fileName);
+
+		String letterType = checkLetterType(ufoFile.getName());
+
 		if(ufoFile.exists()){
 			try{
 				FileReader fileReader = new FileReader(ufoFile);
@@ -114,6 +117,42 @@ public class UfoIO {   //UFO파일에서 데이터를 추출하는 클래스
 			}
 		}
 	}
+
+	//ㅇ,ㅎ 의 경우 페어링을 따로 해야하므로 ㅇ,ㅎ이 들어가 있는 글자인지 아닌지를 구분해준다.
+	public String checkLetterType(String fileName){
+		int cho = 0;
+		int joong = 0;
+		int jong = 0;
+
+		final int GA = 0xAC00;
+		final int GAP = 0x024C;
+
+		final int LEN_JOONG = 21;
+		final int LEN_JONG = 28;
+
+		if(fileName.indexOf(".glif") == -1)
+			return "glif파일아님";
+		String str_unicode = fileName.substring(3, fileName.indexOf('_'));
+		int unicode = Integer.parseInt(str_unicode, 16);
+
+		cho = (unicode - GA) / GAP;
+		joong = (unicode - GA) % GAP;
+		jong = joong % LEN_JONG;
+
+		if ( cho == 11 ) { System.out.println("Code " + cho + ": 이응 is included in 초성"); }
+		else if ( cho == 18 ) { System.out.println("Code " + cho + ": 히읗 is included in 초성"); }
+		else { cho = -1; System.out.println("Code -1: 이응, 히읗 is not included in 초성"); }
+
+
+		if ( jong == 21 ) { System.out.println("Code " + jong + ": 이응 is included 종성"); }
+		else if ( jong == 27 ) { System.out.println("Code " + jong + ": 히읗 is included in 종성"); }
+		else if ( jong == 6 ) { System.out.println("Code " + jong + ": 니은히읗 is included in 종성"); }
+		else if ( jong == 15 ) { System.out.println("Code " + jong + ": 히읗 is included in 종성"); }
+		else { jong = -1; System.out.println("Code -1: 이응, 히읗 is not included in 종성"); }
+
+		return cho + ", " + jong;
+	}
+
 
 	// 7/31 준은 추가 : GUI에서 파일을 받아와서 불러온 파일이 존재하는 폴더에 그대로 덮어쓴다.
 	public void writeMetaUfo(ArrayList<Pair> pairList, File file){
